@@ -1,8 +1,13 @@
 import { useState } from "react";
 import "./App.css";
-import { Counter } from "./features/counter/Counter";
+
+import Home from "./pages/Home/Home";
 function App() {
-  return <div className="App"></div>;
+  return (
+    <div>
+      <Home />
+    </div>
+  );
 }
 
 export default App;
