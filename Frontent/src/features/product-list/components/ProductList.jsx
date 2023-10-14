@@ -2,6 +2,7 @@ import { Fragment, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import Rating from "react-rating";
 import {
   ChevronDownIcon,
   FunnelIcon,
@@ -9,6 +10,9 @@ import {
   PlusIcon,
   Squares2X2Icon,
 } from "@heroicons/react/20/solid";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
+import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 import { Link } from "react-router-dom";
 const items = [
@@ -33,69 +37,6 @@ const items = [
     type: "Full-time",
     location: "Remote",
   },
-];
-const products = [
-  {
-    id: 1,
-    name: "Basic Tee",
-    href: "/ProductDetail",
-    imageSrc:
-      "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: "$35",
-    color: "Black",
-  },
-  {
-    id: 2,
-    name: "Basic Tee",
-    href: "/ProductDetail",
-    imageSrc:
-      "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: "$35",
-    color: "Black",
-  },
-  {
-    id: 3,
-    name: "Basic Tee",
-    href: "/ProductDetail",
-    imageSrc:
-      "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: "$35",
-    color: "Black",
-  },
-  {
-    id: 4,
-    name: "Basic Tee",
-    href: "/ProductDetail",
-    imageSrc:
-      "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: "$35",
-    color: "Black",
-  },
-  {
-    id: 5,
-    name: "Basic Tee",
-    href: "/ProductDetail",
-    imageSrc:
-      "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: "$35",
-    color: "Black",
-  },
-  {
-    id: 6,
-    name: "Basic Tee",
-    href: "/ProductDetail",
-    imageSrc:
-      "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: "$35",
-    color: "Black",
-  },
-  // More products...
 ];
 
 const sortOptions = [
@@ -158,6 +99,11 @@ function classNames(...classes) {
 const ProductList = () => {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const dispatch = useDispatch();
+
+  function discountedPrice(originalPrice, discountedPercentage) {
+    const finalAmount = originalPrice * (1 - discountedPercentage / 100);
+    return Math.round(finalAmount);
+  }
 
   return (
     <div className="bg-white">
@@ -437,29 +383,62 @@ const ProductList = () => {
                           <div key={product.id} className="group relative">
                             <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
                               <img
-                                src={product.imageSrc}
-                                alt={product.imageAlt}
+                                src={product.thumbnail}
+                                alt={product.title}
                                 className="h-full w-full object-cover object-center lg:h-full lg:w-full"
                               />
                             </div>
                             <div className="mt-4 flex justify-between">
                               <div>
                                 <h3 className="text-sm text-gray-700">
-                                  <Link to={product.href}>
+                                  <Link to={product.thumbnail}>
                                     <span
                                       aria-hidden="true"
                                       className="absolute inset-0"
                                     />
-                                    {product.name}
+                                    {product.title}
                                   </Link>
                                 </h3>
-                                <p className="mt-1 text-sm text-gray-500">
-                                  {product.color}
+                                {/* <p className="mt-1 text-sm text-gray-500">
+                                  {product.brand}
+                                </p> */}
+                                <Rating
+                                  emptySymbol={
+                                    <FontAwesomeIcon
+                                      icon={regularStar}
+                                      className="text-gray-800"
+                                    />
+                                  }
+                                  fullSymbol={
+                                    <FontAwesomeIcon
+                                      icon={solidStar}
+                                      className="text-red-800"
+                                    />
+                                  }
+                                  placeholderSymbol={
+                                    <FontAwesomeIcon
+                                      icon={solidStar}
+                                      className="text-orange-400"
+                                    />
+                                  }
+                                  fractions={2}
+                                  readonly
+                                  placeholderRating={product.rating}
+                                />
+                              </div>
+                              <div>
+                                <p className="text-sm font-medium text-gray-500 line-through">
+                                  <span className="pr-1">$</span>
+                                  {product.price}
+                                </p>
+                                <p className="text-sm font-medium text-gray-900">
+                                  <span className="pr-1">$</span>
+                                  {discountedPrice(
+                                    product.price,
+                                    product.discountPercentage
+                                  )}
                                 </p>
                               </div>
-                              <p className="text-sm font-medium text-gray-900">
-                                {product.price}
-                              </p>
                             </div>
                           </div>
                         </Link>
