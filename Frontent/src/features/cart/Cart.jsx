@@ -1,6 +1,7 @@
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import { Link } from "react-router-dom";
 const products = [
   {
     id: 1,
@@ -33,6 +34,9 @@ const Cart = () => {
 
   return (
     <div className="mx-auto max-w-7xl mt-12 bg-white px-4 sm:px-6 lg:px-8">
+      <h1 className=" py-4 text-4xl font-bold tracking-tight text-gray-900">
+        Cart
+      </h1>
       <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
         <div className="flow-root">
           <ul role="list" className="-my-6 divide-y divide-gray-200">
@@ -59,7 +63,20 @@ const Cart = () => {
                     </p>
                   </div>
                   <div className="flex flex-1 items-end justify-between text-sm">
-                    <p className="text-gray-500">Qty {product.quantity}</p>
+                    <div className="text-gray-500">
+                      <label
+                        htmlFor="quantity"
+                        className="inline mr-5 text-sm font-medium leading-6 text-gray-900"
+                      >
+                        Qty
+                      </label>
+                      <select className="mx-4">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                      </select>
+                      {/* {product.quantity} */}
+                    </div>
 
                     <div className="flex">
                       <button
@@ -96,14 +113,16 @@ const Cart = () => {
         <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
           <p>
             or
-            <button
-              type="button"
-              className="font-medium text-indigo-600 hover:text-indigo-500"
-              onClick={() => setOpen(false)}
-            >
-              Continue Shopping
-              <span aria-hidden="true"> &rarr;</span>
-            </button>
+            <Link to="/">
+              <button
+                type="button"
+                className="font-medium text-indigo-600 hover:text-indigo-500"
+                onClick={() => setOpen(false)}
+              >
+                Continue Shopping
+                <span aria-hidden="true"> &rarr;</span>
+              </button>
+            </Link>
           </p>
         </div>
       </div>

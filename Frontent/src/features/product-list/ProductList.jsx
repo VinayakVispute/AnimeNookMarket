@@ -160,14 +160,6 @@ const ProductList = () => {
 
   return (
     <div className="bg-white">
-      {/*
-        This example requires updating your template:
-
-        ```
-        <html class="h-full bg-gray-100">
-        <body class="h-full">
-        ```
-      */}
       <div>
         {/* Mobile filter dialog */}
         <Transition.Root show={mobileFiltersOpen} as={Fragment}>
@@ -372,17 +364,6 @@ const ProductList = () => {
               {/* Filters */}
               <form className="hidden lg:block">
                 <h3 className="sr-only">Categories</h3>
-                {/* <ul
-                  role="list"
-                  className="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900"
-                >
-                  {subCategories.map((category) => (
-                    <li key={category.name}>
-                      <a href={category.href}>{category.name}</a>
-                    </li>
-                  ))}
-                </ul> */}
-
                 {filters.map((section) => (
                   <Disclosure
                     as="div"
@@ -443,7 +424,6 @@ const ProductList = () => {
               </form>
               {/* Product grid start */}
               <div className="lg:col-span-3">
-                {" "}
                 <div className="bg-white">
                   <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6 sm:py-8 lg:max-w-7xl lg:px-8">
                     <h2 className="text-2xl font-bold tracking-tight text-gray-900">
