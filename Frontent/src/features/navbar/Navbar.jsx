@@ -52,7 +52,7 @@ const Navbar = ({ children }) => {
                     <div className="hidden md:block">
                       <div className="ml-10 flex items-baseline space-x-4">
                         {navigation.map((item) => (
-                          <a
+                          <div
                             key={item.name}
                             href={item.href}
                             className={classNames(
@@ -64,7 +64,7 @@ const Navbar = ({ children }) => {
                             aria-current={item.current ? "page" : undefined}
                           >
                             {item.name}
-                          </a>
+                          </div>
                         ))}
                       </div>
                     </div>
@@ -83,7 +83,7 @@ const Navbar = ({ children }) => {
                             className="h-6 w-6"
                             aria-hidden="true"
                           />
-                          <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -right-2 dark:border-gray-900">
+                          <div className="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -right-2 dark:border-gray-900">
                             20
                           </div>
                         </button>
@@ -200,7 +200,7 @@ const Navbar = ({ children }) => {
                           className="h-6 w-6"
                           aria-hidden="true"
                         />
-                        <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -right-2 dark:border-gray-900">
+                        <div className="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -right-2 dark:border-gray-900">
                           20
                         </div>
                       </button>
