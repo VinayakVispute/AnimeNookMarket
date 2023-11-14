@@ -96,14 +96,12 @@ const ProductList = () => {
   };
 
   const handlePage = (page) => {
-    console.log(page);
     setPage(page);
   };
 
   useEffect(() => {
     const pagination = { _page: page, _limit: ITEMS_PER_PAGE };
     dispatch(fetchProductsByFilterAsync({ filter, sort, pagination }));
-    console.log(page);
   }, [dispatch, filter, sort, page]);
 
   useEffect(() => {
@@ -235,7 +233,6 @@ const Pagination = ({ handlePage, page, setPage, totalItems }) => (
       <div className="flex flex-1 justify-between sm:hidden">
         <button
           onClick={(e) => {
-            console.log(page <= 1);
             return setPage(page - 1);
           }}
           disabled={page <= 1}
@@ -287,7 +284,6 @@ const Pagination = ({ handlePage, page, setPage, totalItems }) => (
                 page <= 1 ? "cursor-not-allowed" : "cursor-pointer"
               }`}
               onClick={(e) => {
-                console.log(page);
                 return setPage(page - 1);
               }}
             >
@@ -544,7 +540,7 @@ const ProductGrid = ({ products }) => {
 
           <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
             {products.map((product) => (
-              <Link to="/ProductDetail">
+              <Link to={`/ProductDetail/${product.id}`}>
                 <div key={product.id} className="group relative">
                   <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
                     <img

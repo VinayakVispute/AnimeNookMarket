@@ -48,7 +48,9 @@
       "brand": "Samsung",
       "category": "smartphones",
       "thumbnail": "https://i.dummyjson.com/data/products/3/thumbnail.jpg",
-      "images": ["https://i.dummyjson.com/data/products/3/1.jpg"]
+      "images": [
+        "https://i.dummyjson.com/data/products/3/1.jpg"
+      ]
     },
     {
       "id": 4,
@@ -1426,7 +1428,9 @@
       "brand": "Fashion Jewellery",
       "category": "womens-jewellery",
       "thumbnail": "https://i.dummyjson.com/data/products/78/thumbnail.jpg",
-      "images": ["https://i.dummyjson.com/data/products/78/thumbnail.jpg"]
+      "images": [
+        "https://i.dummyjson.com/data/products/78/thumbnail.jpg"
+      ]
     },
     {
       "id": 79,
@@ -1439,7 +1443,9 @@
       "brand": "Fashion Jewellery",
       "category": "womens-jewellery",
       "thumbnail": "https://i.dummyjson.com/data/products/79/thumbnail.jpg",
-      "images": ["https://i.dummyjson.com/data/products/79/1.jpg"]
+      "images": [
+        "https://i.dummyjson.com/data/products/79/1.jpg"
+      ]
     },
     {
       "id": 80,
@@ -2326,6 +2332,529 @@
       "value": "lighting",
       "label": "Lighting",
       "checked": false
+    }
+  ],
+  "user": [
+    {
+      "email": "itsupport@delta-ssi.net",
+      "password": "Admin@1234",
+      "addresses": [
+        {
+          "name": "Vinayak Vispute",
+          "email": "vinayakvispute4@gmail.com",
+          "country": "India",
+          "street": "K-301 Shree Siddheshwar Hill,NH-8 Near Kahna Nirmal, Tarsali",
+          "city": "Vadodara",
+          "state": "Gujarat",
+          "pinCode": "390009",
+          "phone": "8401282183"
+        },
+        {
+          "name": "Govind Vispute",
+          "email": "govindvispute40gv@gmail.com",
+          "country": "India",
+          "street": "C-8/139 GIDC Colony, Near Vima Hospital, Makarpura",
+          "city": "Vadodara",
+          "state": "Gujarat",
+          "pinCode": "390009",
+          "phone": "9898114851"
+        },
+        {
+          "name": "Vinayak Vispute",
+          "email": "vinayakvispute4@gmail.com",
+          "country": "India",
+          "street": "K-301 Shree Siddheshwar Hill,NH-8 Near Kahna Nirmal, Tarsali",
+          "city": "Vadodara",
+          "state": "Gujarat",
+          "pinCode": "390009",
+          "phone": "08401282183"
+        }
+      ],
+      "id": 1
+    },
+    {
+      "email": "vinayakvispute4@gmail.com",
+      "password": "Admin@2023",
+      "addresses": [
+        {
+          "name": "Vinayak Vispute",
+          "email": "vinayakvispute4@gmail.com",
+          "country": "India",
+          "street": "K-301 Shree Siddheshwar Hill,NH-8 Near Kahna Nirmal, Tarsali",
+          "city": "Vadodara",
+          "state": "Gujarat",
+          "pinCode": "390009",
+          "phone": "08401282183"
+        }
+      ],
+      "id": 2
+    }
+  ],
+  "countries": [
+    {
+      "name": "India",
+      "value": "india"
+    },
+    {
+      "name": "Afghanistan",
+      "value": "afghanistan"
+    },
+    {
+      "name": "Argentina",
+      "value": "argentina"
+    },
+    {
+      "name": "Australia",
+      "value": "australia"
+    },
+    {
+      "name": "Azerbaijan",
+      "value": "azerbaijan"
+    },
+    {
+      "name": "Bangladesh",
+      "value": "bangladesh"
+    },
+    {
+      "name": "Belgium",
+      "value": "belgium"
+    },
+    {
+      "name": "Bermuda",
+      "value": "bermuda"
+    },
+    {
+      "name": "Bhutan",
+      "value": "bhutan"
+    },
+    {
+      "name": "Brazil",
+      "value": "brazil"
+    },
+    {
+      "name": "Cambodia",
+      "value": "cambodia"
+    },
+    {
+      "name": "Canada",
+      "value": "canada"
+    },
+    {
+      "name": "Chile",
+      "value": "chile"
+    },
+    {
+      "name": "China",
+      "value": "china"
+    },
+    {
+      "name": "Colombia",
+      "value": "colombia"
+    },
+    {
+      "name": "Cuba",
+      "value": "cuba"
+    },
+    {
+      "name": "Denmark",
+      "value": "denmark"
+    },
+    {
+      "name": "Egypt",
+      "value": "egypt"
+    },
+    {
+      "name": "Finland",
+      "value": "finland"
+    },
+    {
+      "name": "France",
+      "value": "france"
+    },
+    {
+      "name": "Georgia",
+      "value": "georgia"
+    },
+    {
+      "name": "Germany",
+      "value": "germany"
+    },
+    {
+      "name": "Greece",
+      "value": "greece"
+    },
+    {
+      "name": "Greenland",
+      "value": "greenland"
+    },
+    {
+      "name": "Hong Kong",
+      "value": "hong-kong"
+    },
+    {
+      "name": "Hungary",
+      "value": "hungary"
+    },
+    {
+      "name": "Iceland",
+      "value": "iceland"
+    },
+    {
+      "name": "Japan",
+      "value": "japan"
+    },
+    {
+      "name": "Jordan",
+      "value": "jordan"
+    },
+    {
+      "name": "Kazakhstan",
+      "value": "kazakhstan"
+    },
+    {
+      "name": "Kenya",
+      "value": "kenya"
+    },
+    {
+      "name": "Korea, Republic of",
+      "value": "korea-republic-of"
+    },
+    {
+      "name": "Malaysia",
+      "value": "malaysia"
+    },
+    {
+      "name": "Maldives",
+      "value": "maldives"
+    },
+    {
+      "name": "Mexico",
+      "value": "mexico"
+    },
+    {
+      "name": "Monaco",
+      "value": "monaco"
+    },
+    {
+      "name": "Mongolia",
+      "value": "mongolia"
+    },
+    {
+      "name": "Nepal",
+      "value": "nepal"
+    },
+    {
+      "name": "Netherlands",
+      "value": "netherlands"
+    },
+    {
+      "name": "New Zealand",
+      "value": "new-zealand"
+    },
+    {
+      "name": "Nigeria",
+      "value": "nigeria"
+    },
+    {
+      "name": "Norway",
+      "value": "norway"
+    },
+    {
+      "name": "Oman",
+      "value": "oman"
+    },
+    {
+      "name": "Pakistan",
+      "value": "pakistan"
+    },
+    {
+      "name": "Philippines",
+      "value": "philippines"
+    },
+    {
+      "name": "Poland",
+      "value": "poland"
+    },
+    {
+      "name": "Portugal",
+      "value": "portugal"
+    },
+    {
+      "name": "Romania",
+      "value": "romania"
+    },
+    {
+      "name": "Russian Federation",
+      "value": "russian-federation"
+    },
+    {
+      "name": "Saudi Arabia",
+      "value": "saudi-arabia"
+    },
+    {
+      "name": "Singapore",
+      "value": "singapore"
+    },
+    {
+      "name": "South Africa",
+      "value": "south-africa"
+    },
+    {
+      "name": "Spain",
+      "value": "spain"
+    },
+    {
+      "name": "Sri Lanka",
+      "value": "sri-lanka"
+    },
+    {
+      "name": "Sudan",
+      "value": "sudan"
+    },
+    {
+      "name": "Sweden",
+      "value": "sweden"
+    },
+    {
+      "name": "Switzerland",
+      "value": "switzerland"
+    },
+    {
+      "name": "Tajikistan",
+      "value": "tajikistan"
+    },
+    {
+      "name": "Thailand",
+      "value": "thailand"
+    },
+    {
+      "name": "Turkey",
+      "value": "turkey"
+    },
+    {
+      "name": "Uganda",
+      "value": "uganda"
+    },
+    {
+      "name": "Ukraine",
+      "value": "ukraine"
+    },
+    {
+      "name": "United Arab Emirates",
+      "value": "united-arab-emirates"
+    },
+    {
+      "name": "United Kingdom",
+      "value": "united-kingdom"
+    },
+    {
+      "name": "United States",
+      "value": "united-states"
+    },
+    {
+      "name": "Vietnam",
+      "value": "vietnam"
+    },
+    {
+      "name": "Yemen",
+      "value": "yemen"
+    },
+    {
+      "name": "Zimbabwe",
+      "value": "zimbabwe"
+    }
+  ],
+  "cart": [
+    {
+      "title": "iPhone 9",
+      "description": "An apple mobile which is nothing like apple",
+      "price": 549,
+      "discountPercentage": 12.96,
+      "rating": 4.69,
+      "stock": 94,
+      "brand": "Apple",
+      "category": "smartphones",
+      "thumbnail": "https://i.dummyjson.com/data/products/1/thumbnail.jpg",
+      "images": [
+        "https://i.dummyjson.com/data/products/1/1.jpg",
+        "https://i.dummyjson.com/data/products/1/2.jpg",
+        "https://i.dummyjson.com/data/products/1/3.jpg",
+        "https://i.dummyjson.com/data/products/1/4.jpg",
+        "https://i.dummyjson.com/data/products/1/thumbnail.jpg"
+      ],
+      "quantity": 1,
+      "user": 1,
+      "id": 1
+    }
+  ],
+  "orders": [
+    {
+      "items": [
+        {
+          "title": "Automatic Motor Gas Motorcycles",
+          "description": "150cc 4-Stroke Motorcycle Automatic Motor Gas Motorcycles Scooter motorcycles 150cc scooter",
+          "price": 1050,
+          "discountPercentage": 3.34,
+          "rating": 4.84,
+          "stock": 127,
+          "brand": "shock absorber",
+          "category": "motorcycle",
+          "thumbnail": "https://i.dummyjson.com/data/products/93/thumbnail.jpg",
+          "images": [
+            "https://i.dummyjson.com/data/products/93/1.jpg",
+            "https://i.dummyjson.com/data/products/93/2.jpg",
+            "https://i.dummyjson.com/data/products/93/3.jpg",
+            "https://i.dummyjson.com/data/products/93/4.jpg",
+            "https://i.dummyjson.com/data/products/93/thumbnail.jpg"
+          ],
+          "quantity": 1,
+          "user": 1,
+          "id": 1
+        },
+        {
+          "title": "Microsoft Surface Laptop 4",
+          "description": "Style and speed. Stand out on HD video calls backed by Studio Mics. Capture ideas on the vibrant touchscreen.",
+          "price": 1499,
+          "discountPercentage": 10.23,
+          "rating": 4.43,
+          "stock": 68,
+          "brand": "Microsoft Surface",
+          "category": "laptops",
+          "thumbnail": "https://i.dummyjson.com/data/products/8/thumbnail.jpg",
+          "images": [
+            "https://i.dummyjson.com/data/products/8/1.jpg",
+            "https://i.dummyjson.com/data/products/8/2.jpg",
+            "https://i.dummyjson.com/data/products/8/3.jpg",
+            "https://i.dummyjson.com/data/products/8/4.jpg",
+            "https://i.dummyjson.com/data/products/8/thumbnail.jpg"
+          ],
+          "quantity": 1,
+          "user": 1,
+          "id": 2
+        }
+      ],
+      "totalAmount": 2549,
+      "totalItems": 2,
+      "selectedAddress": {
+        "name": "Vinayak Vispute",
+        "email": "vinayakvispute4@gmail.com",
+        "country": "India",
+        "street": "K-301 Shree Siddheshwar Hill,NH-8 Near Kahna Nirmal, Tarsali",
+        "city": "Vadodara",
+        "state": "Gujarat",
+        "pinCode": "390009",
+        "phone": "8401282183"
+      },
+      "paymentMethod": "cash",
+      "user": {
+        "email": "itsupport@delta-ssi.net",
+        "password": "Admin@1234",
+        "addresses": [
+          {
+            "name": "Vinayak Vispute",
+            "email": "vinayakvispute4@gmail.com",
+            "country": "India",
+            "street": "K-301 Shree Siddheshwar Hill,NH-8 Near Kahna Nirmal, Tarsali",
+            "city": "Vadodara",
+            "state": "Gujarat",
+            "pinCode": "390009",
+            "phone": "8401282183"
+          },
+          {
+            "name": "Govind Vispute",
+            "email": "govindvispute40gv@gmail.com",
+            "country": "India",
+            "street": "C-8/139 GIDC Colony, Near Vima Hospital, Makarpura",
+            "city": "Vadodara",
+            "state": "Gujarat",
+            "pinCode": "390009",
+            "phone": "9898114851"
+          }
+        ],
+        "id": 1
+      },
+      "status": "pending",
+      "id": 1
+    },
+    {
+      "items": [
+        {
+          "title": "Samsung Universe 9",
+          "description": "Samsung's new variant which goes beyond Galaxy to the Universe",
+          "price": 1249,
+          "discountPercentage": 15.46,
+          "rating": 4.09,
+          "stock": 36,
+          "brand": "Samsung",
+          "category": "smartphones",
+          "thumbnail": "https://i.dummyjson.com/data/products/3/thumbnail.jpg",
+          "images": [
+            "https://i.dummyjson.com/data/products/3/1.jpg"
+          ],
+          "quantity": 1,
+          "user": 1,
+          "id": 1
+        },
+        {
+          "title": "Samsung Universe 9",
+          "description": "Samsung's new variant which goes beyond Galaxy to the Universe",
+          "price": 1249,
+          "discountPercentage": 15.46,
+          "rating": 4.09,
+          "stock": 36,
+          "brand": "Samsung",
+          "category": "smartphones",
+          "thumbnail": "https://i.dummyjson.com/data/products/3/thumbnail.jpg",
+          "images": [
+            "https://i.dummyjson.com/data/products/3/1.jpg"
+          ],
+          "quantity": 1,
+          "user": 1,
+          "id": 2
+        }
+      ],
+      "totalAmount": 2498,
+      "totalItems": 2,
+      "selectedAddress": {
+        "name": "Vinayak Vispute",
+        "email": "vinayakvispute4@gmail.com",
+        "country": "India",
+        "street": "K-301 Shree Siddheshwar Hill,NH-8 Near Kahna Nirmal, Tarsali",
+        "city": "Vadodara",
+        "state": "Gujarat",
+        "pinCode": "390009",
+        "phone": "8401282183"
+      },
+      "paymentMethod": "cash",
+      "user": {
+        "email": "itsupport@delta-ssi.net",
+        "password": "Admin@1234",
+        "addresses": [
+          {
+            "name": "Vinayak Vispute",
+            "email": "vinayakvispute4@gmail.com",
+            "country": "India",
+            "street": "K-301 Shree Siddheshwar Hill,NH-8 Near Kahna Nirmal, Tarsali",
+            "city": "Vadodara",
+            "state": "Gujarat",
+            "pinCode": "390009",
+            "phone": "8401282183"
+          },
+          {
+            "name": "Govind Vispute",
+            "email": "govindvispute40gv@gmail.com",
+            "country": "India",
+            "street": "C-8/139 GIDC Colony, Near Vima Hospital, Makarpura",
+            "city": "Vadodara",
+            "state": "Gujarat",
+            "pinCode": "390009",
+            "phone": "9898114851"
+          }
+        ],
+        "id": 1
+      },
+      "status": "pending",
+      "id": 2
     }
   ]
 }

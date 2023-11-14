@@ -1,13 +1,15 @@
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
+import { Link } from "react-router-dom";
 import {
   Bars3Icon,
   BellIcon,
   XMarkIcon,
   ShoppingCartIcon,
 } from "@heroicons/react/24/outline";
-import finalPropsSelectorFactory from "react-redux/es/connect/selectorFactory";
-import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectItems } from "../cart/cartSlice";
+
 const user = {
   name: "Tom Cook",
   email: "tom@example.com",
@@ -22,15 +24,17 @@ const navigation = [
   //   { name: "Reports", href: "#", current: false },
 ];
 const userNavigation = [
-  { name: "Your Profile", href: "#" },
-  { name: "Settings", href: "#" },
-  { name: "Sign out", href: "#" },
+  { name: "Your Profile", href: "/" },
+  { name: "Settings", href: "/" },
+  { name: "Sign out", href: "/login" },
+  { name: "Sign up", href: "/Register" },
 ];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 const Navbar = ({ children }) => {
+  const items = useSelector(selectItems);
   return (
     <>
       <div className="min-h-full">
@@ -52,9 +56,9 @@ const Navbar = ({ children }) => {
                     <div className="hidden md:block">
                       <div className="ml-10 flex items-baseline space-x-4">
                         {navigation.map((item) => (
-                          <div
+                          <Link
                             key={item.name}
-                            href={item.href}
+                            to={item.href}
                             className={classNames(
                               item.current
                                 ? "bg-gray-900 text-white"
@@ -64,7 +68,7 @@ const Navbar = ({ children }) => {
                             aria-current={item.current ? "page" : undefined}
                           >
                             {item.name}
-                          </div>
+                          </Link>
                         ))}
                       </div>
                     </div>
@@ -83,9 +87,11 @@ const Navbar = ({ children }) => {
                             className="h-6 w-6"
                             aria-hidden="true"
                           />
-                          <div className="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -right-2 dark:border-gray-900">
-                            20
-                          </div>
+                          {items.length > 0 && (
+                            <div className="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -right-2 dark:border-gray-900">
+                              {items.length}
+                            </div>
+                          )}
                         </button>
                       </Link>
                       {/* Profile dropdown */}
@@ -114,15 +120,15 @@ const Navbar = ({ children }) => {
                             {userNavigation.map((item) => (
                               <Menu.Item key={item.name}>
                                 {({ active }) => (
-                                  <a
-                                    href={item.href}
+                                  <Link
+                                    to={item.href}
                                     className={classNames(
                                       active ? "bg-gray-100" : "",
                                       "block px-4 py-2 text-sm text-gray-700"
                                     )}
                                   >
                                     {item.name}
-                                  </a>
+                                  </Link>
                                 )}
                               </Menu.Item>
                             ))}
@@ -200,22 +206,24 @@ const Navbar = ({ children }) => {
                           className="h-6 w-6"
                           aria-hidden="true"
                         />
-                        <div className="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -right-2 dark:border-gray-900">
-                          20
-                        </div>
+                        {items.length > 0 && (
+                          <div className="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -right-2 dark:border-gray-900">
+                            {items.length}
+                          </div>
+                        )}
                       </button>
                     </Link>
                   </div>
                   <div className="mt-3 space-y-1 px-2">
                     {userNavigation.map((item) => (
-                      <Disclosure.Button
+                      <Link
                         key={item.name}
                         as="a"
                         href={item.href}
                         className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
                       >
                         {item.name}
-                      </Disclosure.Button>
+                      </Link>
                     ))}
                   </div>
                 </div>

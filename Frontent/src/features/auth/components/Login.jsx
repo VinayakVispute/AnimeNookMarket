@@ -1,7 +1,27 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { checkUserAsync, selectError, selectLoggedInUser } from "../authSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const Login = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const dispatch = useDispatch();
+  const reduxError = useSelector(selectError);
+
+  const inputClassName = (field) =>
+    `block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ${
+      errors[field] ? "ring-red-500" : "ring-gray-300"
+    } placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6`;
+
+  const onSubmit = (data) => {
+    dispatch(checkUserAsync({ email: data.email, password: data.password }));
+  };
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -17,7 +37,7 @@ const Login = () => {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" action="#" method="POST">
+          <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
             <div>
               <label
                 htmlFor="email"
@@ -28,12 +48,22 @@ const Login = () => {
               <div className="mt-2">
                 <input
                   id="email"
-                  name="email"
+                  formNoValidate
+                  {...register("email", {
+                    required: "This field is required",
+                    pattern: {
+                      value:
+                        /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g,
+                      message: "Invalid email address",
+                    },
+                  })}
                   type="email"
-                  autoComplete="email"
-                  required
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className={inputClassName("email")}
                 />
+
+                {errors.email && (
+                  <span className="text-red-500">{errors.email.message}</span>
+                )}
               </div>
             </div>
 
@@ -57,12 +87,33 @@ const Login = () => {
               <div className="mt-2">
                 <input
                   id="password"
-                  name="password"
+                  {...register("password", {
+                    required: "This field is required",
+                    minLength: {
+                      value: 8,
+                      message: "Password must be at least 8 characters long",
+                    },
+                    maxLength: {
+                      value: 16,
+                      message: "Password must be at most 16 characters long",
+                    },
+                    pattern: {
+                      value:
+                        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>])[a-zA-Z\d!@#$%^&*(),.?":{}|<>]{8,16}$/,
+                      message:
+                        "Password must be 8-16 characters long and include at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character.",
+                    },
+                  })}
                   type="password"
-                  autoComplete="current-password"
-                  required
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className={inputClassName("password")}
                 />
+
+                {errors.password && (
+                  <div className="text-red-500">{errors.password.message}</div>
+                )}
+                {reduxError && (
+                  <div className="text-red-500">{reduxError.message}</div>
+                )}
               </div>
             </div>
 

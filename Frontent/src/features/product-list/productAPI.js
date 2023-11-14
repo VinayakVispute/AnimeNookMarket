@@ -13,6 +13,7 @@ export function fetchProductsByFilter(filter, sort, pagination) {
   let queryString = "";
   for (let key in filter) {
     const categoriesValues = filter[key];
+
     if (categoriesValues.length > 0) {
       const lastCategoryValue = categoriesValues[categoriesValues.length - 1];
       queryString += `${key}=${lastCategoryValue}&`;
@@ -47,7 +48,13 @@ export function fetchCategories() {
   return new Promise(async (resolve) => {
     const response = await fetch("http://localhost:8000/categories");
     const data = await response.json();
-    console.log(data);
+    resolve({ data });
+  });
+}
+export function fetchProductById(id) {
+  return new Promise(async (resolve) => {
+    const response = await fetch("http://localhost:8000/products/" + id);
+    const data = await response.json();
     resolve({ data });
   });
 }
