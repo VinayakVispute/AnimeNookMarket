@@ -7,27 +7,27 @@ import {
   XMarkIcon,
   ShoppingCartIcon,
 } from "@heroicons/react/24/outline";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectItems } from "../cart/cartSlice";
+import { selectLoggedInUser, signOutAsync } from "../auth/authSlice";
 
-const user = {
-  name: "Tom Cook",
-  email: "tom@example.com",
-  imageUrl:
-    "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-};
+const imageUrl =
+  "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80";
+
 const navigation = [
-  { name: "Dashboard", href: "#", current: true },
-  { name: "Team", href: "#", current: false },
-  //   { name: "Projects", href: "#", current: false },
-  //   { name: "Calendar", href: "#", current: false },
-  //   { name: "Reports", href: "#", current: false },
+  { name: "Home", href: "/", current: true, admin: false },
+  { name: "Profile", href: "/Profile", current: false, admin: false },
+  { name: "Dashboard", href: "/admin/dashboard", current: false, admin: true },
+  {
+    name: "Add Product",
+    href: "/admin/productForm",
+    current: false,
+    admin: true,
+  },
 ];
 const userNavigation = [
-  { name: "Your Profile", href: "/" },
-  { name: "Settings", href: "/" },
-  { name: "Sign out", href: "/login" },
-  { name: "Sign up", href: "/Register" },
+  { name: "Your Profile", href: "/Profile" },
+  { name: "Your Orders", href: "/Orders" },
 ];
 
 function classNames(...classes) {
@@ -35,6 +35,8 @@ function classNames(...classes) {
 }
 const Navbar = ({ children }) => {
   const items = useSelector(selectItems);
+  const user = useSelector(selectLoggedInUser);
+  const dispatch = useDispatch();
   return (
     <>
       <div className="min-h-full">
@@ -55,21 +57,24 @@ const Navbar = ({ children }) => {
                     </div>
                     <div className="hidden md:block">
                       <div className="ml-10 flex items-baseline space-x-4">
-                        {navigation.map((item) => (
-                          <Link
-                            key={item.name}
-                            to={item.href}
-                            className={classNames(
-                              item.current
-                                ? "bg-gray-900 text-white"
-                                : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                              "rounded-md px-3 py-2 text-sm font-medium"
-                            )}
-                            aria-current={item.current ? "page" : undefined}
-                          >
-                            {item.name}
-                          </Link>
-                        ))}
+                        {navigation.map(
+                          (item) =>
+                            !(item.admin && user?.role !== "admin") && (
+                              <Link
+                                key={item.name}
+                                to={item.href}
+                                className={classNames(
+                                  item.current
+                                    ? "bg-gray-900 text-white"
+                                    : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                                  "rounded-md px-3 py-2 text-sm font-medium"
+                                )}
+                                aria-current={item.current ? "page" : undefined}
+                              >
+                                {item.name}
+                              </Link>
+                            )
+                        )}
                       </div>
                     </div>
                   </div>
@@ -102,7 +107,7 @@ const Navbar = ({ children }) => {
                             <span className="sr-only">Open user menu</span>
                             <img
                               className="h-8 w-8 rounded-full"
-                              src={user.imageUrl}
+                              src={imageUrl}
                               alt=""
                             />
                           </Menu.Button>
@@ -132,6 +137,21 @@ const Navbar = ({ children }) => {
                                 )}
                               </Menu.Item>
                             ))}
+                            <Menu.Item>
+                              {({ active }) => (
+                                <div
+                                  onClick={() => {
+                                    dispatch(signOutAsync(user.id));
+                                  }}
+                                  className={classNames(
+                                    active ? "bg-gray-100" : "",
+                                    "block px-4 py-2 text-sm text-gray-700 cursor-pointer"
+                                  )}
+                                >
+                                  Sign out
+                                </div>
+                              )}
+                            </Menu.Item>
                           </Menu.Items>
                         </Transition>
                       </Menu>
@@ -182,16 +202,16 @@ const Navbar = ({ children }) => {
                     <div className="flex-shrink-0">
                       <img
                         className="h-10 w-10 rounded-full"
-                        src={user.imageUrl}
+                        src={imageUrl}
                         alt=""
                       />
                     </div>
                     <div className="ml-3">
                       <div className="text-base font-medium leading-none text-white">
-                        {user.name}
+                        {user?.name}
                       </div>
                       <div className="text-sm font-medium leading-none text-gray-400">
-                        {user.email}
+                        {user?.email}
                       </div>
                     </div>
                     <Link to="/Cart">
@@ -232,13 +252,6 @@ const Navbar = ({ children }) => {
           )}
         </Disclosure>
 
-        <header className="bg-white shadow">
-          <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-            <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-              Dashboard
-            </h1>
-          </div>
-        </header>
         <main>
           <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
             {children}

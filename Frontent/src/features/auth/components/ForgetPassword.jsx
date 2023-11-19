@@ -1,17 +1,15 @@
 import React from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { checkUserAsync, selectError, selectLoggedInUser } from "../authSlice";
-import { useDispatch, useSelector } from "react-redux";
-
-const Login = () => {
+import { selectError } from "../authSlice";
+import { useSelector } from "react-redux";
+const ForgetPassword = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const dispatch = useDispatch();
   const reduxError = useSelector(selectError);
 
   const inputClassName = (field) =>
@@ -20,8 +18,11 @@ const Login = () => {
     } placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6`;
 
   const onSubmit = (data) => {
-    dispatch(checkUserAsync({ email: data.email, password: data.password }));
+    // dispatch(forgetPasswordAsync({ email: data.email }));
+    // TODO: Implementation to be done on backend
+    console.log(data);
   };
+
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -32,8 +33,11 @@ const Login = () => {
             alt="Your Company"
           />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Sign in to your account
+            Forgot your password?
           </h2>
+          <p className="mt-2 text-center text-sm text-gray-600 max-w">
+            Enter your email address and we'll send you a reset link.
+          </p>
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
@@ -68,72 +72,28 @@ const Login = () => {
             </div>
 
             <div>
-              <div className="flex items-center justify-between">
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium leading-6 text-gray-900"
-                >
-                  Password
-                </label>
-                <div className="text-sm">
-                  <Link
-                    to="/forget-password"
-                    className="font-semibold text-indigo-600 hover:text-indigo-500"
-                  >
-                    Forgot password?
-                  </Link>
-                </div>
-              </div>
-              <div className="mt-2">
-                <input
-                  id="password"
-                  {...register("password", {
-                    required: "This field is required",
-                    minLength: {
-                      value: 8,
-                      message: "Password must be at least 8 characters long",
-                    },
-                    maxLength: {
-                      value: 16,
-                      message: "Password must be at most 16 characters long",
-                    },
-                    pattern: {
-                      value:
-                        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>])[a-zA-Z\d!@#$%^&*(),.?":{}|<>]{8,16}$/,
-                      message:
-                        "Password must be 8-16 characters long and include at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character.",
-                    },
-                  })}
-                  type="password"
-                  className={inputClassName("password")}
-                />
-
-                {errors.password && (
-                  <div className="text-red-500">{errors.password.message}</div>
-                )}
-                {reduxError && (
-                  <div className="text-red-500">{reduxError.message}</div>
-                )}
-              </div>
-            </div>
-
-            <div>
               <button
                 type="submit"
                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
-                Sign in
+                Reset Password
               </button>
             </div>
           </form>
 
-          <p className="mt-10 text-center text-sm text-gray-500">
-            Not a member?{" "}
+          {reduxError && (
+            <div className="mt-2 text-center text-red-500">
+              {reduxError.message}
+            </div>
+          )}
+
+          <p className="mt-4 text-center text-sm text-gray-500">
+            Remember your password?{" "}
             <Link
-              to="/Register"
+              to="/login"
               className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
             >
-              Create an Account
+              Sign in
             </Link>
           </p>
         </div>
@@ -142,4 +102,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ForgetPassword;

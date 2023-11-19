@@ -32,17 +32,10 @@ export function checkUser(loginInfo) {
   });
 }
 
-export function updateUser(update) {
-  return new Promise(async (resolve) => {
-    const response = await fetch(`http://localhost:8000/user/${update.id}`, {
-      method: "PATCH",
-      body: JSON.stringify(update),
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    });
-    const data = await response.json();
-    resolve({ data });
+export function signOut(userId) {
+  return new Promise(async (resolve, reject) => {
+    //TODO :On Server we will remove the session info
+
+    resolve({ data: "success" });
   });
 }

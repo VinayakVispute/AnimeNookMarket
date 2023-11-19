@@ -4,9 +4,7 @@ import ProductList from "../../features/product-list/components/ProductList";
 const Home = () => {
   return (
     <div>
-      <Navbar>
-        <ProductList />
-      </Navbar>
+      <ProductList />
     </div>
   );
 };

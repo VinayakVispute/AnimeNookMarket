@@ -3,7 +3,10 @@ import { StarIcon } from "@heroicons/react/20/solid";
 import { RadioGroup } from "@headlessui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { fetchProductByIdAsync, selectedProductById } from "../productSlice";
+import {
+  fetchProductByIdAsync,
+  selectedProductById,
+} from "../../product-list/productSlice";
 import { addTOCartAsync } from "../../cart/cartSlice";
 import { selectLoggedInUser } from "../../auth/authSlice";
 
@@ -33,7 +36,7 @@ const highlights = [
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
-const ProductDetails = () => {
+const AdminProductDetails = () => {
   const [selectedColor, setSelectedColor] = useState(colors[0]);
   const [selectedSize, setSelectedSize] = useState(sizes[2]);
   const dispatch = useDispatch();
@@ -52,6 +55,7 @@ const ProductDetails = () => {
       addTOCartAsync({ ...productWithoutId, quantity: 1, user: user.id })
     );
   };
+
   return (
     <div className="bg-white">
       {product && (
@@ -342,4 +346,4 @@ const ProductDetails = () => {
   );
 };
 
-export default ProductDetails;
+export default AdminProductDetails;

@@ -9,7 +9,7 @@ import {
   fetchCategoriesAsync,
   fetchBrandsAsync,
   fetchProductsByFilterAsync,
-} from "../productSlice";
+} from "../../product-list/productSlice";
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import Rating from "react-rating";
@@ -50,7 +50,7 @@ function discountedPrice(originalPrice, discountedPercentage) {
   return Math.round(finalAmount);
 }
 
-const ProductList = () => {
+const AdminProductList = () => {
   const dispatch = useDispatch();
   const [filter, setFilter] = useState({});
   const [sort, setSort] = useState({});
@@ -124,8 +124,14 @@ const ProductList = () => {
             <h1 className="text-4xl font-bold tracking-tight text-gray-900">
               New Arrivals
             </h1>
-
+            {/* Add Product Button */}
             <div className="flex items-center">
+              <Link
+                to="/admin/productForm"
+                className="bg-green-600 text-white px-4 py-2 rounded-md mx-2 hover:bg-green-700"
+              >
+                Add Product
+              </Link>
               <Menu as="div" className="relative inline-block text-left">
                 <div>
                   <Menu.Button className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
@@ -601,6 +607,11 @@ const ProductGrid = ({ products }) => {
                     </div>
                   </div>
                 </div>
+                <Link to={`/admin/${product.id}/edit`}>
+                  <button className="mt-2 px-4 py-1 bg-blue-500 text-white rounded-md">
+                    Edit Product
+                  </button>
+                </Link>
               </Link>
             ))}
           </div>
@@ -610,4 +621,4 @@ const ProductGrid = ({ products }) => {
   );
 };
 
-export default ProductList;
+export default AdminProductList;

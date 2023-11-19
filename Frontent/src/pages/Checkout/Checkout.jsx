@@ -13,18 +13,15 @@ import {
   selectAllCountries,
 } from "../../features/countries/countriesSlice";
 import {
-  selectLoggedInUser,
-  updateUserAsync,
-} from "../../features/auth/authSlice";
-import {
   createOrderAsync,
   selectCurrentOrderPlaced,
 } from "../../features/orders/orderSlice";
+import { selectUserInfo, updateUserAsync } from "../../features/user/userSlice";
 
 const Checkout = () => {
   const [paymentMethod, setPaymentMethod] = useState("cash");
   const dispatch = useDispatch();
-  const user = useSelector(selectLoggedInUser); // Get the logged-in user from the store
+  const user = useSelector(selectUserInfo); // Get the logged-in user from the store
   const [selectedAddress, setSelectedAddress] = useState(
     user.addresses.length > 0 ? user.addresses[0] : null
   );
@@ -108,12 +105,8 @@ const Checkout = () => {
           <div className="space-y-12">
             <div className="border-b border-gray-900/10 pb-12">
               <h2 className="text-2xl font-semibold leading-7 text-gray-900">
-                Personal Information
+                Update your Address
               </h2>
-              <p className="mt-1 text-sm leading-6 text-gray-600">
-                Use a permanent address where you can receive mail.
-              </p>
-
               <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                 <div className="sm:col-span-6">
                   <label

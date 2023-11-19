@@ -37,7 +37,7 @@ export function updateCart(update) {
     resolve({ data });
   });
 }
-``;
+
 
 export function deleteItemsfromCart(productId) {
   return new Promise(async (resolve) => {

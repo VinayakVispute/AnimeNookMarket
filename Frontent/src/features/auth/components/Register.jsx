@@ -22,6 +22,8 @@ const Register = () => {
           email: data.email,
           password: data.password,
           addresses: [],
+          role: "user",
+          //TODO: We will give this role from backend directly
         })
       );
       if (user) {

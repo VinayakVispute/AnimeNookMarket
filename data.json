@@ -2,11 +2,11 @@
   "products": [
     {
       "id": 1,
-      "title": "iPhone 9",
+      "title": "iPhone 9 Pro",
       "description": "An apple mobile which is nothing like apple",
-      "price": 549,
-      "discountPercentage": 12.96,
-      "rating": 4.69,
+      "price": 545,
+      "discountPercentage": 12,
+      "rating": 0,
       "stock": 94,
       "brand": "Apple",
       "category": "smartphones",
@@ -14,18 +14,16 @@
       "images": [
         "https://i.dummyjson.com/data/products/1/1.jpg",
         "https://i.dummyjson.com/data/products/1/2.jpg",
-        "https://i.dummyjson.com/data/products/1/3.jpg",
-        "https://i.dummyjson.com/data/products/1/4.jpg",
-        "https://i.dummyjson.com/data/products/1/thumbnail.jpg"
+        "https://i.dummyjson.com/data/products/1/3.jpg"
       ]
     },
     {
       "id": 2,
-      "title": "iPhone X",
+      "title": "iPhone XI",
       "description": "SIM-Free, Model A19211 6.5-inch Super Retina HD display with OLED technology A12 Bionic chip with ...",
       "price": 899,
-      "discountPercentage": 17.94,
-      "rating": 4.44,
+      "discountPercentage": 17,
+      "rating": 0,
       "stock": 34,
       "brand": "Apple",
       "category": "smartphones",
@@ -33,23 +31,24 @@
       "images": [
         "https://i.dummyjson.com/data/products/2/1.jpg",
         "https://i.dummyjson.com/data/products/2/2.jpg",
-        "https://i.dummyjson.com/data/products/2/3.jpg",
-        "https://i.dummyjson.com/data/products/2/thumbnail.jpg"
+        "https://i.dummyjson.com/data/products/2/3.jpg"
       ]
     },
     {
       "id": 3,
       "title": "Samsung Universe 9",
       "description": "Samsung's new variant which goes beyond Galaxy to the Universe",
-      "price": 1249,
-      "discountPercentage": 15.46,
-      "rating": 4.09,
+      "price": 1000,
+      "discountPercentage": 90,
+      "rating": 0,
       "stock": 36,
       "brand": "Samsung",
       "category": "smartphones",
       "thumbnail": "https://i.dummyjson.com/data/products/3/thumbnail.jpg",
       "images": [
-        "https://i.dummyjson.com/data/products/3/1.jpg"
+        "",
+        "",
+        ""
       ]
     },
     {
@@ -57,8 +56,8 @@
       "title": "OPPOF19",
       "description": "OPPO F19 is officially announced on April 2021.",
       "price": 280,
-      "discountPercentage": 17.91,
-      "rating": 4.3,
+      "discountPercentage": 17,
+      "rating": 0,
       "stock": 123,
       "brand": "OPPO",
       "category": "smartphones",
@@ -66,9 +65,7 @@
       "images": [
         "https://i.dummyjson.com/data/products/4/1.jpg",
         "https://i.dummyjson.com/data/products/4/2.jpg",
-        "https://i.dummyjson.com/data/products/4/3.jpg",
-        "https://i.dummyjson.com/data/products/4/4.jpg",
-        "https://i.dummyjson.com/data/products/4/thumbnail.jpg"
+        "https://i.dummyjson.com/data/products/4/3.jpg"
       ]
     },
     {
@@ -93,7 +90,7 @@
       "title": "Vinayak Pro",
       "description": "MacBook Pro 2021 with mini-LED display may launch between September, November",
       "price": 17499,
-      "discountPercentage": 11.02,
+      "discountPercentage": 11,
       "rating": 4.57,
       "stock": 83,
       "brand": "Apple",
@@ -102,8 +99,7 @@
       "images": [
         "https://i.dummyjson.com/data/products/6/1.png",
         "https://i.dummyjson.com/data/products/6/2.jpg",
-        "https://i.dummyjson.com/data/products/6/3.png",
-        "https://i.dummyjson.com/data/products/6/4.jpg"
+        "https://i.dummyjson.com/data/products/6/3.png"
       ]
     },
     {
@@ -1838,6 +1834,23 @@
         "https://i.dummyjson.com/data/products/100/3.jpg",
         "https://i.dummyjson.com/data/products/100/thumbnail.jpg"
       ]
+    },
+    {
+      "title": "Apple iPhone 13 (128GB) - SkyBlue",
+      "description": "15 cm (6.1-inch) Super Retina XDR display\nCinematic mode adds shallow depth of field and shifts focus automatically in your videos\nAdvanced dual-camera system with 12MP Wide and Ultra Wide cameras; Photographic Styles, Smart HDR 4, Night mode, 4K Dolby Vision HDR recording\n12MP TrueDepth front camera with Night mode, 4K Dolby Vision HDR recording\nA15 Bionic chip for lightning-fast performance",
+      "price": 500,
+      "discountPercentage": 10,
+      "stock": 1,
+      "category": "smartphones",
+      "brand": "Apple",
+      "thumbnail": "https://m.media-amazon.com/images/I/71xb2xkN5qL._SX679_.jpg",
+      "images": [
+        "https://m.media-amazon.com/images/I/61CAYVr34QL._SX679_.jpg",
+        "https://m.media-amazon.com/images/I/81junVbiuyL._SX679_.jpg",
+        "https://m.media-amazon.com/images/I/81-hHbjQGSL._SX679_.jpg"
+      ],
+      "rating": 0,
+      "id": 101
     }
   ],
   "brands": [
@@ -2342,52 +2355,60 @@
         {
           "name": "Vinayak Vispute",
           "email": "vinayakvispute4@gmail.com",
-          "country": "India",
+          "phone": "08401282183",
           "street": "K-301 Shree Siddheshwar Hill,NH-8 Near Kahna Nirmal, Tarsali",
           "city": "Vadodara",
           "state": "Gujarat",
           "pinCode": "390009",
-          "phone": "8401282183"
+          "country": "India"
         },
         {
-          "name": "Govind Vispute",
-          "email": "govindvispute40gv@gmail.com",
-          "country": "India",
-          "street": "C-8/139 GIDC Colony, Near Vima Hospital, Makarpura",
-          "city": "Vadodara",
-          "state": "Gujarat",
-          "pinCode": "390009",
-          "phone": "9898114851"
+          "name": "Amit Kadam",
+          "email": "amit.kadam@gmail.com",
+          "country": "Egypt",
+          "street": "G-4/875 Dubai Tower, Dubai",
+          "city": "Dubai",
+          "state": "Dubai",
+          "pinCode": "554874",
+          "phone": "1234657984"
         },
         {
-          "name": "Vinayak Vispute",
-          "email": "vinayakvispute4@gmail.com",
+          "name": "Princy Upadhaya",
+          "email": "amit.kadam@gmail.com",
           "country": "India",
-          "street": "K-301 Shree Siddheshwar Hill,NH-8 Near Kahna Nirmal, Tarsali",
+          "street": "G-4/875 Dubai Tower, Dubai",
+          "city": "Dubai",
+          "state": "Dubai",
+          "pinCode": "554874",
+          "phone": "9898747514"
+        },
+        {
+          "name": "Princy Dhokebazz",
+          "email": "princy.dhokebazz@msu.com",
+          "country": "India",
+          "street": "Darshanam Danteshwar",
           "city": "Vadodara",
           "state": "Gujarat",
-          "pinCode": "390009",
-          "phone": "08401282183"
+          "pinCode": "390004",
+          "phone": "9898554741"
         }
       ],
+      "role": "user",
       "id": 1
     },
     {
       "email": "vinayakvispute4@gmail.com",
       "password": "Admin@2023",
-      "addresses": [
-        {
-          "name": "Vinayak Vispute",
-          "email": "vinayakvispute4@gmail.com",
-          "country": "India",
-          "street": "K-301 Shree Siddheshwar Hill,NH-8 Near Kahna Nirmal, Tarsali",
-          "city": "Vadodara",
-          "state": "Gujarat",
-          "pinCode": "390009",
-          "phone": "08401282183"
-        }
-      ],
+      "addresses": [],
+      "role": "user",
       "id": 2
+    },
+    {
+      "email": "admin@gmail.com",
+      "password": "Admin@1234",
+      "addresses": [],
+      "role": "admin",
+      "id": 3
     }
   ],
   "countries": [
@@ -2668,9 +2689,9 @@
     {
       "title": "iPhone 9",
       "description": "An apple mobile which is nothing like apple",
-      "price": 549,
-      "discountPercentage": 12.96,
-      "rating": 4.69,
+      "price": 500,
+      "discountPercentage": 90,
+      "rating": 0,
       "stock": 94,
       "brand": "Apple",
       "category": "smartphones",
@@ -2678,9 +2699,7 @@
       "images": [
         "https://i.dummyjson.com/data/products/1/1.jpg",
         "https://i.dummyjson.com/data/products/1/2.jpg",
-        "https://i.dummyjson.com/data/products/1/3.jpg",
-        "https://i.dummyjson.com/data/products/1/4.jpg",
-        "https://i.dummyjson.com/data/products/1/thumbnail.jpg"
+        "https://i.dummyjson.com/data/products/1/3.jpg"
       ],
       "quantity": 1,
       "user": 1,
