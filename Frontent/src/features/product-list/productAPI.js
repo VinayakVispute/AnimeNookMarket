@@ -1,6 +1,8 @@
 export function fetchAllProducts() {
   return new Promise(async (resolve) => {
     //TODO :we will not hard-code server URL Here
+    // TODO : Server will filter deleted products
+
     const response = await fetch("http://localhost:8000/products");
     const data = await response.json();
     resolve({ data });
@@ -10,6 +12,10 @@ export function fetchAllProducts() {
 export function fetchProductsByFilter(filter, sort, pagination) {
   //filter = {"category":["smartphone","laptop"]}
   //sort  ={_sort:"price","_order"="desc"}
+  //paginator = {_page:1,_limit:10}
+  //TODO : Server will be supporting mutiple filters and values 
+  // TODO : Server will filter deleted products in case of non admin
+
   let queryString = "";
   for (let key in filter) {
     const categoriesValues = filter[key];

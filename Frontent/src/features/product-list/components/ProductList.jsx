@@ -102,6 +102,7 @@ const ProductList = () => {
   useEffect(() => {
     const pagination = { _page: page, _limit: ITEMS_PER_PAGE };
     dispatch(fetchProductsByFilterAsync({ filter, sort, pagination }));
+    // TODO : Server will filter deleted products
   }, [dispatch, filter, sort, page]);
 
   useEffect(() => {
@@ -536,7 +537,7 @@ const ProductGrid = ({ products }) => {
           <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
             {products.map((product) => (
               <Link to={`/ProductDetail/${product.id}`}>
-                <div key={product.id} className="group relative">
+                <div key={product.id} className="group relative overflow-hidden">
                   <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
                     <img
                       src={product.thumbnail}
@@ -600,6 +601,11 @@ const ProductGrid = ({ products }) => {
                       </p>
                     </div>
                   </div>
+                  {product.isDeleted && (
+                    <div className="absolute transform rotate-45 bg-red-600 text-center text-white font-semibold py-1 right-[-35px] top-[32px] w-[170px]">
+                      <span className="block">Deleted</span>
+                    </div>
+                  )}
                 </div>
               </Link>
             ))}

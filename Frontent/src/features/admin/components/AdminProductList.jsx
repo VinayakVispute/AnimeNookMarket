@@ -542,7 +542,7 @@ const ProductGrid = ({ products }) => {
           <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
             {products.map((product) => (
               <Link to={`/ProductDetail/${product.id}`}>
-                <div key={product.id} className="group relative">
+                <div key={product.id} className="group relative overflow-hidden">
                   <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
                     <img
                       src={product.thumbnail}
@@ -561,9 +561,7 @@ const ProductGrid = ({ products }) => {
                           {product.title}
                         </Link>
                       </h3>
-                      {/* <p className="mt-1 text-sm text-gray-500">
-                    {product.brand}
-                  </p> */}
+ 
                       <Rating
                         emptySymbol={
                           <FontAwesomeIcon
@@ -606,6 +604,11 @@ const ProductGrid = ({ products }) => {
                       </p>
                     </div>
                   </div>
+                  {product.isDeleted && (
+                    <div className="absolute transform rotate-45 bg-red-600 text-center text-white font-semibold py-1 right-[-35px] top-[32px] w-[170px]">
+                      <span className="block">Deleted</span>
+                    </div>
+                  )}
                 </div>
                 <Link to={`/admin/${product.id}/edit`}>
                   <button className="mt-2 px-4 py-1 bg-blue-500 text-white rounded-md">
