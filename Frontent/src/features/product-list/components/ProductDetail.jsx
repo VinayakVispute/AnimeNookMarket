@@ -4,8 +4,13 @@ import { RadioGroup } from "@headlessui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { fetchProductByIdAsync, selectedProductById } from "../productSlice";
-import { addTOCartAsync } from "../../cart/cartSlice";
+import {
+  addTOCartAsync,
+  selectItems,
+  updateCartAsync,
+} from "../../cart/cartSlice";
 import { selectLoggedInUser } from "../../auth/authSlice";
+import { discountedPrice } from "../../../app/constants";
 
 //TODO: In server data we will add color and size and highlight etc
 
@@ -40,18 +45,35 @@ const ProductDetails = () => {
   const { productId } = useParams();
   const product = useSelector(selectedProductById);
   const user = useSelector(selectLoggedInUser);
+  const items = useSelector(selectItems);
 
   useEffect(() => {
     dispatch(fetchProductByIdAsync(productId));
   }, [dispatch, productId]);
 
   const handleCart = () => {
-    // Create a new object without the 'id' property
-    const { id, ...productWithoutId } = product;
-    dispatch(
-      addTOCartAsync({ ...productWithoutId, quantity: 1, user: user.id })
-    );
+    const itemIndex = items.findIndex((item) => item.productId === product.id);
+    console.log(itemIndex, items[0]?.id, product.id);
+    if (itemIndex >= 0) {
+      // Item with the same id found, perform your action here
+      const existingItem = items[itemIndex];
+
+      // Example: Increase the quantity of the existing item
+      const updatedItems = {
+        ...existingItem,
+        quantity: existingItem.quantity + 1,
+      };
+      console.log(updatedItems);
+      dispatch(updateCartAsync(updatedItems));
+    } else {
+      // Item with the same id not found, add it to the cart
+      const { id, ...productWithoutId } = product;
+      dispatch(
+        addTOCartAsync({ ...productWithoutId,productId:product.id, quantity: 1, user: user.id })
+      );
+    }
   };
+
   return (
     <div className="bg-white">
       {product && (
@@ -141,7 +163,7 @@ const ProductDetails = () => {
             <div className="mt-4 lg:row-span-3 lg:mt-0">
               <h2 className="sr-only">Product information</h2>
               <p className="text-3xl tracking-tight text-gray-900">
-                {product.price}
+                {discountedPrice(product)}
               </p>
 
               {/* Reviews */}
@@ -290,12 +312,21 @@ const ProductDetails = () => {
                   </RadioGroup>
                 </div>
 
-                <button
-                  className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                  onClick={handleCart}
-                >
-                  Add to Cart
-                </button>
+                {items.findIndex((item) => item.productId === product.id) >= 0 ? (
+                  <button
+                    className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-yellow-600 px-8 py-3 text-base font-medium text-white hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2"
+                    onClick={handleCart}
+                  >
+                    Already Item in Cart
+                  </button>
+                ) : (
+                  <button
+                    className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    onClick={handleCart}
+                  >
+                    Add to Cart
+                  </button>
+                )}
               </div>
             </div>
 

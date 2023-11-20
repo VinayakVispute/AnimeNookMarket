@@ -24,6 +24,12 @@ const navigation = [
     current: false,
     admin: true,
   },
+  {
+    name: "Order Status",
+    href: "/admin/OrderStatus",
+    current: false,
+    admin: true,
+  },
 ];
 const userNavigation = [
   { name: "Your Profile", href: "/Profile" },
@@ -39,11 +45,11 @@ const Navbar = ({ children }) => {
   const dispatch = useDispatch();
   return (
     <>
-      <div className="min-h-full">
+      <div className="min-h-full min-w-full">
         <Disclosure as="nav" className="bg-gray-800">
           {({ open }) => (
             <>
-              <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+              <div className="mx-auto min-w-full px-4 sm:px-6 lg:px-8">
                 <div className="flex h-16 items-center justify-between">
                   <div className="flex items-center">
                     <div className="flex-shrink-0">
@@ -253,7 +259,7 @@ const Navbar = ({ children }) => {
         </Disclosure>
 
         <main>
-          <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-7xl pb-2 sm:px-6 lg:px-8">
             {children}
           </div>
         </main>

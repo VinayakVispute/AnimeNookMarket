@@ -25,7 +25,7 @@ import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 import { Link } from "react-router-dom";
-import { ITEMS_PER_PAGE } from "../../../app/constants";
+import { ITEMS_PER_PAGE, discountedPrice } from "../../../app/constants";
 
 const sortOptions = [
   { name: "Best Rating", sort: "rating", order: "desc", current: false },
@@ -43,11 +43,6 @@ const sortOptions = [
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
-}
-
-function discountedPrice(originalPrice, discountedPercentage) {
-  const finalAmount = originalPrice * (1 - discountedPercentage / 100);
-  return Math.round(finalAmount);
 }
 
 const AdminProductList = () => {
@@ -542,7 +537,10 @@ const ProductGrid = ({ products }) => {
           <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
             {products.map((product) => (
               <Link to={`/ProductDetail/${product.id}`}>
-                <div key={product.id} className="group relative overflow-hidden">
+                <div
+                  key={product.id}
+                  className="group relative overflow-hidden"
+                >
                   <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
                     <img
                       src={product.thumbnail}
@@ -561,7 +559,7 @@ const ProductGrid = ({ products }) => {
                           {product.title}
                         </Link>
                       </h3>
- 
+
                       <Rating
                         emptySymbol={
                           <FontAwesomeIcon
@@ -593,20 +591,22 @@ const ProductGrid = ({ products }) => {
                     <div>
                       <p className="text-sm font-medium text-gray-500 line-through">
                         <span className="pr-1">$</span>
-                        {product.price}
+                        {discountedPrice(product)}
                       </p>
                       <p className="text-sm font-medium text-gray-900">
                         <span className="pr-1">$</span>
-                        {discountedPrice(
-                          product.price,
-                          product.discountPercentage
-                        )}
+                        {discountedPrice(product)}
                       </p>
                     </div>
                   </div>
                   {product.isDeleted && (
                     <div className="absolute transform rotate-45 bg-red-600 text-center text-white font-semibold py-1 right-[-35px] top-[32px] w-[170px]">
                       <span className="block">Deleted</span>
+                    </div>
+                  )}
+                  {product.stock <=0 && (
+                    <div className="absolute  bg-yellow-600 text-center text-white font-semibold py-1 right-[0px] top-[50%] w-full">
+                      <span className="block">Out Of Stock</span>
                     </div>
                   )}
                 </div>

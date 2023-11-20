@@ -27,6 +27,7 @@ import {
   fetchBrandsAsync,
   fetchCategoriesAsync,
 } from "./features/product-list/productSlice";
+import AdminOrdersPage from "./pages/AdminOrdersPage/AdminOrdersPage";
 
 function App() {
   const user = useSelector(selectLoggedInUser); // Get the logged-in user from the store
@@ -141,9 +142,19 @@ function App() {
           />
           <Route path="productForm" element={<ProductForm />} />
           <Route path=":productId/edit" element={<ProductEditForm />} />
+          <Route
+            path="OrderStatus"
+            element={
+              <>
+                <Navbar />
+                <AdminOrdersPage />
+              </>
+            }
+          />
         </Route>
 
         {/*For Testing Purpose Dont Touch */}
+
         {/*Testing Route End */}
         <Route path="*" element={<PageNotFound />} />
       </Routes>

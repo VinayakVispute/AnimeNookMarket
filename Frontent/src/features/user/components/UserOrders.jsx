@@ -7,6 +7,7 @@ import {
 } from "../userSlice";
 import { Link } from "react-router-dom";
 import { NumericFormat } from "react-number-format";
+import { discountedPrice } from "../../../app/constants";
 
 const UserOrders = () => {
   const dispatch = useDispatch();
@@ -54,7 +55,7 @@ const UserOrders = () => {
                               {product.title}
                             </Link>
                           </h3>
-                          <p className="ml-4">$ {product.price}</p>
+                          <p className="ml-4">$ {discountedPrice(product)}</p>
                         </div>
                         <p className="mt-1 text-sm text-gray-500">
                           {product.brand}

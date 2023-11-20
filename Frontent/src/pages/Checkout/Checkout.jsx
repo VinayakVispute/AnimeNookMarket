@@ -17,6 +17,7 @@ import {
   selectCurrentOrderPlaced,
 } from "../../features/orders/orderSlice";
 import { selectUserInfo, updateUserAsync } from "../../features/user/userSlice";
+import { discountedPrice } from "../../app/constants";
 
 const Checkout = () => {
   const [paymentMethod, setPaymentMethod] = useState("cash");
@@ -40,7 +41,7 @@ const Checkout = () => {
   const items = useSelector(selectItems);
   const currentOrderPlaced = useSelector(selectCurrentOrderPlaced);
   const totalAmount = items.reduce(
-    (total, item) => item.price * item.quantity + total,
+    (total, item) => discountedPrice(item) * item.quantity + total,
     0
   );
   const totalItems = items.reduce((total, item) => item.quantity + total, 0);
@@ -79,7 +80,7 @@ const Checkout = () => {
       selectedAddress,
       paymentMethod,
       user,
-      status: "pending",
+      status: "Pending",
     };
     dispatch(createOrderAsync(order));
     //TODO : redirect to successpage
@@ -439,7 +440,7 @@ const Checkout = () => {
                               {product.title}
                             </Link>
                           </h3>
-                          <p className="ml-4">$ {product.price}</p>
+                          <p className="ml-4">$ {discountedPrice(product)}</p>
                         </div>
                         <p className="mt-1 text-sm text-gray-500">
                           {product.brand}
