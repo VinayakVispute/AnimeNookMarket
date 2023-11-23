@@ -1,5 +1,8 @@
 const Product = require("../models/ProductModel");
+const Category = require("../models/CategoryModel");
+const Brand = require("../models/BrandModel");
 
+const mongoose = require("mongoose");
 const {
   isFileTypeSupported,
   uploadFileToCloudinary,
@@ -171,10 +174,60 @@ const updateProductById = async (req, res) => {
     });
   }
 };
+const getAllProductsByFilter = async (req, res) => {
+  try {
+    const { _sort, _order, _page, _limit = 10, category, brand } = req.query;
+
+    // Construct the filter object
+    const filter = {};
+
+    // Handle category and brand filters
+    if (category) {
+      const categoryId = category.map((id) => new mongoose.Types.ObjectId(id));
+      filter.$or = [{ category: { $in: categoryId } }];
+    }
+
+    if (brand) {
+      const brandId = brand.map((id) => new mongoose.Types.ObjectId(id));
+      const brandFilter = { brand: { $in: brandId } };
+      filter.$or = filter.$or ? [...filter.$or, brandFilter] : [brandFilter];
+    }
+
+    // Handle sorting
+    const sortObj =
+      _sort && _order ? { [_sort]: _order === "asc" ? 1 : -1 } : {};
+
+    // Handle pagination
+    const limitValue = parseInt(_limit);
+    const skipValue = (_page - 1) * limitValue;
+    // Get the total count of documents after applying the filter
+    const totalCount = await Product.countDocuments(filter);
+    res.set("X-Total-Count", totalCount);
+    // Query and populate
+    const products = await Product.find(filter)
+      .sort(sortObj)
+      .skip(skipValue)
+      .limit(limitValue)
+      .populate("category brand");
+
+    return res.status(200).json({
+      success: true,
+      data: products,
+      totalCount,
+    });
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
+};
 
 module.exports = {
   createProduct,
   getAllProducts,
   getProductById,
   updateProductById,
+  getAllProductsByFilter,
 };

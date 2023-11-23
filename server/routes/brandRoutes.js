@@ -5,7 +5,7 @@ const {
   getAllBrands,
   getBrandById,
   updateBrandById,
-} = require("../controllers/BrandController");
+} = require("../controllers/brandController");
 
 // Routes
 router.get("/", getAllBrands).get("/:id", getBrandById);

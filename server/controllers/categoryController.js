@@ -70,9 +70,11 @@ const getCategoryById = async (req, res) => {
 
 const updateCategoryById = async (req, res) => {
   const categoryId = req.params.id;
-  const updateData = req.body;
+  const { label } = req.body;
 
   try {
+    const value = label.toLowerCase().replace(/\s+/g, "-");
+    const updateData = { label, value };
     // Find the Category by ID in the database and update it
     const updatedCategory = await Category.findByIdAndUpdate(
       categoryId,

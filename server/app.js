@@ -9,6 +9,8 @@ require("dotenv").config(); // Load environment variables from .env file
 
 // Import routes
 const productRoutes = require("./routes/productRoutes");
+const categoryRoutes = require("./routes/categoryRoutes");
+const brandRoutes = require("./routes/brandRoutes");
 //End of Import of Routes
 
 // Create an Express application
@@ -35,6 +37,8 @@ app.get("/", (req, res) => {
 //Routes
 
 app.use("/products", productRoutes);
+app.use("/brands", brandRoutes);
+app.use("/categories", categoryRoutes);
 
 cloudinary.cloudinaryConnect();
 

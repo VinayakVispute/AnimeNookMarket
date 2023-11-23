@@ -68,11 +68,15 @@ const getBrandById = async (req, res) => {
 
 const updateBrandById = async (req, res) => {
   const brandId = req.params.id;
-  const updateData = req.body;
+  const { label } = req.body;
 
   try {
+    console.log("label", req.body);
+    const value = label.toLowerCase().replace(/\s+/g, "-");
+    const updatedData = { label, value };
+
     // Find the Brand by ID in the database and update it
-    const updatedBrand = await Brand.findByIdAndUpdate(brandId, updateData, {
+    const updatedBrand = await Brand.findByIdAndUpdate(brandId, updatedData, {
       new: true,
     });
 

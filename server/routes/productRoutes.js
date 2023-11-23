@@ -2,17 +2,16 @@ const express = require("express");
 const router = express.Router();
 
 const {
-  createCategory,
-  getAllCategories,
-  getCategoryById,
-  updateCategoryById,
-} = require("../controllers/categoryController");
+  createProduct,
+  getAllProducts,
+  getProductById,
+  updateProductById,
+  getAllProductsByFilter,
+} = require("../controllers/productController");
 
 // Routes
-router.get("/", getAllCategories).get("/:id", getCategoryById);
-
-router.post("/", createCategory);
-
-router.put("/:id", updateCategoryById);
+router.get("/", getAllProductsByFilter).get("/:id", getProductById);
+router.post("/", createProduct);
+router.patch("/:id", updateProductById);
 
 module.exports = router;
