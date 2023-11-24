@@ -13,18 +13,20 @@ export function fetchProductsByFilter(filter, sort, pagination) {
   //filter = {"category":["smartphone","laptop"]}
   //sort  ={_sort:"price","_order"="desc"}
   //paginator = {_page:1,_limit:10}
-  //TODO : Server will be supporting mutiple filters and values 
+  //TODO : Server will be supporting mutiple filters and values
   // TODO : Server will filter deleted products in case of non admin
-
+  console.log(filter);
   let queryString = "";
   for (let key in filter) {
-    const categoriesValues = filter[key];
+    const values = filter[key];
 
-    if (categoriesValues.length > 0) {
-      const lastCategoryValue = categoriesValues[categoriesValues.length - 1];
-      queryString += `${key}=${lastCategoryValue}&`;
+    if (values.length > 0) {
+      values.forEach((value) => {
+        queryString += `${key}=${value}&`;
+      });
     }
   }
+
   for (let key in sort) {
     queryString += `${key}=${sort[key]}&`;
   }
@@ -38,8 +40,7 @@ export function fetchProductsByFilter(filter, sort, pagination) {
       "http://localhost:8000/products?" + queryString
     );
     const data = await response.json();
-    const totalItems = await response.headers.get("X-Total-Count");
-    resolve({ data: { products: data, totalItems: parseInt(totalItems) } });
+    resolve({ data });
   });
 }
 
@@ -81,14 +82,17 @@ export function createProduct(productData) {
 export function updateProduct(updateProductData) {
   return new Promise(async (resolve) => {
     //TODO :we will not hard-code server URL Here
-    const response = await fetch(`http://localhost:8000/products/${updateProductData.id}`, {
-      method: "PATCH",
-      body: JSON.stringify(updateProductData),
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `http://localhost:8000/products/${updateProductData.id}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify(updateProductData),
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    );
     const data = await response.json();
     resolve({ data });
   });

@@ -4,6 +4,7 @@ const cors = require("cors");
 const connectDB = require("./connection/db");
 const fileUpload = require("express-fileupload");
 const cloudinary = require("./connection/cloudinary");
+const morgan = require("morgan");
 
 require("dotenv").config(); // Load environment variables from .env file
 
@@ -15,9 +16,11 @@ const brandRoutes = require("./routes/brandRoutes");
 
 // Create an Express application
 const app = express();
-const port = process.env.PORT || 3000; // Set the port for the server
+const port = process.env.PORT || 8000; // Set the port for the server
 
 // Enable CORS for all routes
+app.use(morgan("combined"));
+
 app.use(cors());
 
 // Parse incoming JSON requests
@@ -29,6 +32,7 @@ app.use(
     tempFileDir: "/tmp/",
   })
 );
+
 // Define a simple route to check if the server is connected
 app.get("/", (req, res) => {
   res.send("Connected");

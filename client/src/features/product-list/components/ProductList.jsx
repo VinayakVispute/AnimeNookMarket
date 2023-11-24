@@ -69,17 +69,16 @@ const ProductList = () => {
   ];
 
   const handleFilter = (e, section, option) => {
+    console.log(section, option);
     const newFilter = { ...filter };
     if (e.target.checked) {
       if (newFilter[section.id]) {
-        newFilter[section.id].push(option.value);
+        newFilter[section.id].push(option.id);
       } else {
-        newFilter[section.id] = [option.value];
+        newFilter[section.id] = [option.id];
       }
     } else {
-      const index = newFilter[section.id].findIndex(
-        (el) => el === option.value
-      );
+      const index = newFilter[section.id].findIndex((el) => el === option.id);
       newFilter[section.id].splice(index, 1);
     }
     setFilter(newFilter);

@@ -177,18 +177,24 @@ const updateProductById = async (req, res) => {
 const getAllProductsByFilter = async (req, res) => {
   try {
     const { _sort, _order, _page, _limit = 10, category, brand } = req.query;
-
+    //TODO:Get sorting based on discounted price not actual price
     // Construct the filter object
     const filter = {};
 
     // Handle category and brand filters
     if (category) {
-      const categoryId = category.map((id) => new mongoose.Types.ObjectId(id));
+      const categoryId = Array.isArray(category)
+        ? category.map((id) => new mongoose.Types.ObjectId(id))
+        : new mongoose.Types.ObjectId(category);
+
       filter.$or = [{ category: { $in: categoryId } }];
     }
 
     if (brand) {
-      const brandId = brand.map((id) => new mongoose.Types.ObjectId(id));
+      const brandId = Array.isArray(brand)
+        ? brand.map((id) => new mongoose.Types.ObjectId(id))
+        : new mongoose.Types.ObjectId(brand);
+
       const brandFilter = { brand: { $in: brandId } };
       filter.$or = filter.$or ? [...filter.$or, brandFilter] : [brandFilter];
     }
@@ -200,9 +206,10 @@ const getAllProductsByFilter = async (req, res) => {
     // Handle pagination
     const limitValue = parseInt(_limit);
     const skipValue = (_page - 1) * limitValue;
+
     // Get the total count of documents after applying the filter
-    const totalCount = await Product.countDocuments(filter);
-    res.set("X-Total-Count", totalCount);
+    const totalItems = await Product.countDocuments(filter);
+
     // Query and populate
     const products = await Product.find(filter)
       .sort(sortObj)
@@ -212,8 +219,7 @@ const getAllProductsByFilter = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      data: products,
-      totalCount,
+      data: { products, totalItems },
     });
   } catch (error) {
     console.error("Error fetching products:", error);
