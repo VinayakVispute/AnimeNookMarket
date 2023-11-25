@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "express-session": "^1.17.3",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0"
+  }
+}

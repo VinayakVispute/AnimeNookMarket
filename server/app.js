@@ -5,7 +5,8 @@ const connectDB = require("./connection/db");
 const fileUpload = require("express-fileupload");
 const cloudinary = require("./connection/cloudinary");
 const morgan = require("morgan");
-
+const passport = require("passport");
+const session = require("express-session");
 require("dotenv").config(); // Load environment variables from .env file
 
 // Import routes
@@ -21,6 +22,15 @@ const port = process.env.PORT || 8000; // Set the port for the server
 // Enable CORS for all routes
 app.use(morgan("combined"));
 
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+app.use(passport.authenticate("session"));
 app.use(cors());
 
 // Parse incoming JSON requests
