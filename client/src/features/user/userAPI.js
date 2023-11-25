@@ -8,9 +8,9 @@ export function fetchLoggedInUserOrders(userId) {
   });
 }
 
-export function fetchLoggedInUser(userId) {
+export function fetchLoggedInUser() {
   return new Promise(async (resolve) => {
-    const response = await fetch(`http://localhost:8000/user/${userId}`);
+    const response = await fetch("http://localhost:8000/user/");
     const data = await response.json();
     resolve({ data });
   });

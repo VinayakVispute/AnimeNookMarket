@@ -71,7 +71,6 @@ const updateBrandById = async (req, res) => {
   const { label } = req.body;
 
   try {
-    console.log("label", req.body);
     const value = label.toLowerCase().replace(/\s+/g, "-");
     const updatedData = { label, value };
 

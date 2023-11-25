@@ -66,7 +66,6 @@ const createProduct = async (req, res) => {
         uploadFileToCloudinary(imageFile, "AnimeNookMarket")
       )
     );
-    console.log(thumbnailResponse);
     // Save the product to the database
     const newProduct = await Product.create({
       title,

@@ -8,7 +8,6 @@ import {
   selectedProductById,
 } from "../../product-list/productSlice";
 import { addTOCartAsync } from "../../cart/cartSlice";
-import { selectLoggedInUser } from "../../auth/authSlice";
 import { discountedPrice } from "../../../app/constants";
 
 //TODO: In server data we will add color and size and highlight etc
@@ -43,7 +42,6 @@ const AdminProductDetails = () => {
   const dispatch = useDispatch();
   const { productId } = useParams();
   const product = useSelector(selectedProductById);
-  const user = useSelector(selectLoggedInUser);
 
   useEffect(() => {
     dispatch(fetchProductByIdAsync(productId));
@@ -52,9 +50,7 @@ const AdminProductDetails = () => {
   const handleCart = () => {
     // Create a new object without the 'id' property
     const { id, ...productWithoutId } = product;
-    dispatch(
-      addTOCartAsync({ ...productWithoutId, quantity: 1, user: user.id })
-    );
+    dispatch(addTOCartAsync({ ...productWithoutId, quantity: 1 }));
   };
 
   return (

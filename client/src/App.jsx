@@ -37,8 +37,8 @@ function App() {
     const fetchData = async () => {
       if (user) {
         await Promise.all([
-          dispatch(fetchItemsByUserIdAsync(user.id)),
-          dispatch(fetchLoggedInUserAsync(user.id)),
+          dispatch(fetchItemsByUserIdAsync()),
+          dispatch(fetchLoggedInUserAsync()),
         ]);
       }
 

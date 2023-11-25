@@ -7,20 +7,33 @@ const cloudinary = require("./connection/cloudinary");
 const morgan = require("morgan");
 const passport = require("passport");
 const session = require("express-session");
+const crypto = require("crypto"); // For hashing passwords
+const jwt = require("jsonwebtoken"); // For generating JWTs
+const JwtStrategy = require("passport-jwt").Strategy;
+const ExtractJwt = require("passport-jwt").ExtractJwt;
+const LocalStrategy = require("passport-local").Strategy;
+const User = require("./models/UsersModel"); // Assuming you have a User model
 require("dotenv").config(); // Load environment variables from .env file
-
-// Import routes
-const productRoutes = require("./routes/productRoutes");
-const categoryRoutes = require("./routes/categoryRoutes");
-const brandRoutes = require("./routes/brandRoutes");
-//End of Import of Routes
 
 // Create an Express application
 const app = express();
 const port = process.env.PORT || 8000; // Set the port for the server
 
+//Import Middlewares
+const isAuthenticated = require("./middlewares/authentication");
+const sanitizeUser = require("./utils/sanitizeUser");
+
 // Enable CORS for all routes
-app.use(morgan("combined"));
+app.use(cors());
+
+// Parse incoming JSON requests
+app.use(express.json());
+
+//For JWT Authentication
+const SECRET_KEY = "SECRET_KEY";
+const opts = {};
+opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+opts.secretOrKey = SECRET_KEY;
 
 app.use(
   session({
@@ -30,31 +43,115 @@ app.use(
   })
 );
 
-app.use(passport.authenticate("session"));
-app.use(cors());
+// Initialize Passport
+app.use(passport.initialize());
+app.use(passport.session());
+// Import routes
+const productRoutes = require("./routes/productRoutes");
+const categoryRoutes = require("./routes/categoryRoutes");
+const brandRoutes = require("./routes/brandRoutes");
+const authRoutes = require("./routes/authRoutes");
 
-// Parse incoming JSON requests
-app.use(express.json());
+// Define a simple route to check if the server is connected
+// app.get("/", (req, res) => {
+//   res.send("Connected");
+// });
 
-app.use(
-  fileUpload({
-    useTempFiles: true,
-    tempFileDir: "/tmp/",
+// Passport Strategy for authentication
+
+// Local Strategy
+passport.use(
+  "local",
+  new LocalStrategy(
+    {
+      usernameField: "email",
+    },
+    async function (email, password, done) {
+      try {
+        const user = await User.findOne({ email });
+        if (!user) {
+          console.log("Incorrect email.");
+          return done(null, false, { message: "Incorrect email." });
+        }
+
+        const hashedPassword = await new Promise((resolve, reject) => {
+          crypto.pbkdf2(
+            password,
+            user.salt,
+            310000,
+            64,
+            "sha256",
+            (err, hashedPassword) => {
+              if (err) reject(err);
+              else resolve(hashedPassword);
+            }
+          );
+        });
+
+        if (!crypto.timingSafeEqual(user.password, hashedPassword)) {
+          console.log("Incorrect password.");
+          return done(null, false, { message: "Incorrect password." });
+        }
+
+        const token = jwt.sign(sanitizeUser(user), SECRET_KEY);
+        return done(
+          null,
+          { id: user.id, role: user.role, token },
+          {
+            message: "Logged in successfully.",
+          }
+        );
+      } catch (err) {
+        return done(err, false, { message: "Internal Server Error" });
+      }
+    }
+  )
+);
+
+// JWT Strategy
+
+passport.use(
+  "jwt",
+  new JwtStrategy(opts, async function (jwt_payload, done) {
+    console.log("jwt_payload", jwt_payload);
+    try {
+      const user = await User.findOne({ _id: jwt_payload.id });
+      console.log("user", user);
+      if (user) {
+        return done(null, sanitizeUser(user), { message: "Logged in." });
+      } else {
+        return done(null, false, { message: "Not logged in." });
+      }
+    } catch (err) {
+      return done(err, false, { message: "Internal Server Error" });
+    }
   })
 );
 
-// Define a simple route to check if the server is connected
-app.get("/", (req, res) => {
-  res.send("Connected");
+// Serialize user
+passport.serializeUser(function (user, cb) {
+  process.nextTick(function () {
+    console.log("serializeUser", sanitizeUser(user));
+    cb(null, sanitizeUser(user));
+  });
 });
 
-//Routes
+// Deserialize user
+passport.deserializeUser(async function (user, cb) {
+  process.nextTick(function () {
+    console.log("deserializeUser", user);
+    cb(null, user);
+  });
+});
 
-app.use("/products", productRoutes);
-app.use("/brands", brandRoutes);
-app.use("/categories", categoryRoutes);
-
+// Configure cloudinary
 cloudinary.cloudinaryConnect();
+
+// Routes
+app.use("/products", isAuthenticated(), productRoutes);
+app.use("/brands", isAuthenticated(), brandRoutes);
+app.use("/categories", isAuthenticated(), categoryRoutes);
+app.use("/auth", authRoutes);
 
 // Start the server and connect to the database
 const start = async () => {

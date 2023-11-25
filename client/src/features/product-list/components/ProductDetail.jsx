@@ -9,7 +9,6 @@ import {
   selectItems,
   updateCartAsync,
 } from "../../cart/cartSlice";
-import { selectLoggedInUser } from "../../auth/authSlice";
 import { discountedPrice } from "../../../app/constants";
 
 //TODO: In server data we will add color and size and highlight etc
@@ -44,7 +43,6 @@ const ProductDetails = () => {
   const dispatch = useDispatch();
   const { productId } = useParams();
   const product = useSelector(selectedProductById);
-  const user = useSelector(selectLoggedInUser);
   const items = useSelector(selectItems);
 
   useEffect(() => {
@@ -69,7 +67,11 @@ const ProductDetails = () => {
       // Item with the same id not found, add it to the cart
       const { id, ...productWithoutId } = product;
       dispatch(
-        addTOCartAsync({ ...productWithoutId,productId:product.id, quantity: 1, user: user.id })
+        addTOCartAsync({
+          ...productWithoutId,
+          productId: product.id,
+          quantity: 1,
+        })
       );
     }
   };
@@ -312,7 +314,8 @@ const ProductDetails = () => {
                   </RadioGroup>
                 </div>
 
-                {items.findIndex((item) => item.productId === product.id) >= 0 ? (
+                {items.findIndex((item) => item.productId === product.id) >=
+                0 ? (
                   <button
                     className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-yellow-600 px-8 py-3 text-base font-medium text-white hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2"
                     onClick={handleCart}

@@ -10,6 +10,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { selectItems } from "../cart/cartSlice";
 import { selectLoggedInUser, signOutAsync } from "../auth/authSlice";
+import { selectUserInfo } from "../user/userSlice";
 
 const imageUrl =
   "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80";
@@ -41,7 +42,7 @@ function classNames(...classes) {
 }
 const Navbar = ({ children }) => {
   const items = useSelector(selectItems);
-  const user = useSelector(selectLoggedInUser);
+  const userInfo = useSelector(selectUserInfo);
   const dispatch = useDispatch();
   return (
     <>
@@ -65,7 +66,7 @@ const Navbar = ({ children }) => {
                       <div className="ml-10 flex items-baseline space-x-4">
                         {navigation.map(
                           (item) =>
-                            !(item.admin && user?.role !== "admin") && (
+                            !(item.admin && userInfo?.role !== "admin") && (
                               <Link
                                 key={item.name}
                                 to={item.href}
@@ -214,10 +215,10 @@ const Navbar = ({ children }) => {
                     </div>
                     <div className="ml-3">
                       <div className="text-base font-medium leading-none text-white">
-                        {user?.name}
+                        {userInfo?.name}
                       </div>
                       <div className="text-sm font-medium leading-none text-gray-400">
-                        {user?.email}
+                        {userInfo?.email}
                       </div>
                     </div>
                     <Link to="/Cart">
