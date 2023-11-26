@@ -13,7 +13,7 @@ const Login = () => {
 
   const dispatch = useDispatch();
   const reduxError = useSelector(selectError);
-
+  const user = useSelector(selectLoggedInUser);
   const inputClassName = (field) =>
     `block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ${
       errors[field] ? "ring-red-500" : "ring-gray-300"

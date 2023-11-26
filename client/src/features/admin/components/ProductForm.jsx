@@ -30,7 +30,6 @@ const ProductForm = () => {
     delete product["Image1"];
     delete product["Image2"];
     delete product["Image3"];
-    console.log(product);
     dispatch(createProductAsync(product));
   };
   return (

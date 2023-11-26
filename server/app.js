@@ -11,10 +11,11 @@ const crypto = require("crypto"); // For hashing passwords
 const jwt = require("jsonwebtoken"); // For generating JWTs
 const JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJwt = require("passport-jwt").ExtractJwt;
+const cookieParser = require("cookie-parser");
+const ExtractCookie = require("./utils/extractCookie");
 const LocalStrategy = require("passport-local").Strategy;
 const User = require("./models/UsersModel"); // Assuming you have a User model
 require("dotenv").config(); // Load environment variables from .env file
-
 // Create an Express application
 const app = express();
 const port = process.env.PORT || 8000; // Set the port for the server
@@ -24,16 +25,20 @@ const isAuthenticated = require("./middlewares/authentication");
 const sanitizeUser = require("./utils/sanitizeUser");
 
 // Enable CORS for all routes
-app.use(cors());
+app.use(cors({ origin: true, credentials: true }));
 
 // Parse incoming JSON requests
 app.use(express.json());
+// For Parsing cookies
+app.use(cookieParser());
 
 //For JWT Authentication
 const SECRET_KEY = "SECRET_KEY";
 const opts = {};
-opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+opts.jwtFromRequest = ExtractCookie;
 opts.secretOrKey = SECRET_KEY;
+
+// For Session
 
 app.use(
   session({
@@ -51,11 +56,12 @@ const productRoutes = require("./routes/productRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
 const brandRoutes = require("./routes/brandRoutes");
 const authRoutes = require("./routes/authRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 // Define a simple route to check if the server is connected
-// app.get("/", (req, res) => {
-//   res.send("Connected");
-// });
+app.get("/", (req, res) => {
+  res.send("Connected");
+});
 
 // Passport Strategy for authentication
 
@@ -151,6 +157,7 @@ cloudinary.cloudinaryConnect();
 app.use("/products", isAuthenticated(), productRoutes);
 app.use("/brands", isAuthenticated(), brandRoutes);
 app.use("/categories", isAuthenticated(), categoryRoutes);
+app.use("/users", isAuthenticated(), userRoutes);
 app.use("/auth", authRoutes);
 
 // Start the server and connect to the database

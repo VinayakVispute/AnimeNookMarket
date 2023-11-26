@@ -40,7 +40,6 @@ const ProductForm = () => {
 
   useEffect(() => {
     if (product && productId) {
-      console.log(product);
       setFieldValues();
     }
   }, [product, setValue, productId]);
@@ -57,7 +56,6 @@ const ProductForm = () => {
       thumbnail,
       images,
     } = product;
-    console.log(category, brand);
     setValue("title", title);
     setValue("description", description);
     setValue("price", price);

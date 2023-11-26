@@ -51,7 +51,6 @@ const ProductDetails = () => {
 
   const handleCart = () => {
     const itemIndex = items.findIndex((item) => item.productId === product.id);
-    console.log(itemIndex, items[0]?.id, product.id);
     if (itemIndex >= 0) {
       // Item with the same id found, perform your action here
       const existingItem = items[itemIndex];
@@ -61,7 +60,6 @@ const ProductDetails = () => {
         ...existingItem,
         quantity: existingItem.quantity + 1,
       };
-      console.log(updatedItems);
       dispatch(updateCartAsync(updatedItems));
     } else {
       // Item with the same id not found, add it to the cart

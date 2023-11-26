@@ -54,8 +54,7 @@ export const userSlice = createSlice({
       })
       .addCase(fetchLoggedInUserAsync.fulfilled, (state, action) => {
         state.status = "idle";
-        //this info can be different or more from loggined user from auth
-        state.userInfo = action.payload;
+        state.userInfo = action.payload.user;
       })
       .addCase(updateUserAsync.pending, (state) => {
         state.status = "loading";
@@ -63,7 +62,7 @@ export const userSlice = createSlice({
       .addCase(updateUserAsync.fulfilled, (state, action) => {
         state.status = "idle";
         //this info can be different or more from loggined user from auth
-        state.userInfo = action.payload;
+        state.userInfo = action.payload.user;
       });
   },
 });

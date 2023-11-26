@@ -190,7 +190,7 @@ const Navbar = ({ children }) => {
                   {navigation.map((item) => (
                     <Disclosure.Button
                       key={item.name}
-                      as="a"
+                      as="div"
                       href={item.href}
                       className={classNames(
                         item.current
@@ -245,7 +245,7 @@ const Navbar = ({ children }) => {
                     {userNavigation.map((item) => (
                       <Link
                         key={item.name}
-                        as="a"
+                        as="div"
                         href={item.href}
                         className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
                       >

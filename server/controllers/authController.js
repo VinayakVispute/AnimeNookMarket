@@ -53,12 +53,17 @@ const signUp = async (req, res) => {
               });
             } else {
               const token = jwt.sign(sanitizeUser(newUser), SECRET_KEY);
-              console.log("registering user", sanitizeUser(newUser));
-              return res.status(201).json({
-                success: true,
-                message: "User registered successfully",
-                user: sanitizeUser(newUser),
-              });
+              return res
+                .cookie("jwt", token, {
+                  httpOnly: true,
+                  expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 1 day
+                })
+                .status(201)
+                .json({
+                  success: true,
+                  message: "User registered successfully",
+                  user: token,
+                });
             }
           });
         } catch (err) {
@@ -78,15 +83,22 @@ const signUp = async (req, res) => {
 };
 
 const login = async (req, res) => {
-  return res.json({
-    success: true,
-    message: "User logged in successfully",
-    user: sanitizeUser(req.user),
-  });
+  return res
+    .cookie("jwt", req.user.token, {
+      expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+      httpOnly: true,
+    })
+    .status(201)
+    .json({
+      success: true,
+      message: "User logged in successfully",
+      user: req.user.token,
+    });
 };
 
 const checkUser = async (req, res) => {
   const loggedUser = await req.user;
+  console.log(req.user);
   if (!loggedUser) {
     return res.json({
       success: false,
@@ -94,11 +106,17 @@ const checkUser = async (req, res) => {
       user: null,
     });
   }
-  return res.json({
-    success: true,
-    message: "User logged in successfully",
-    user: sanitizeUser(loggedUser),
-  });
+
+  return res
+    .cookie("jwt", req.user.token, {
+      httpOnly: true,
+      expires: new Date(Date.now() + 60 * 60 * 1000), // 1 hour
+    })
+    .json({
+      success: true,
+      message: "User logged in successfully",
+      user: loggedUser,
+    });
 };
 
 module.exports = { login, checkUser, signUp };

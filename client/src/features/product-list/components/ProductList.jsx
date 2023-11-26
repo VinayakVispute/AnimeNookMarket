@@ -69,7 +69,6 @@ const ProductList = () => {
   ];
 
   const handleFilter = (e, section, option) => {
-    console.log(section, option);
     const newFilter = { ...filter };
     if (e.target.checked) {
       if (newFilter[section.id]) {
@@ -250,16 +249,16 @@ const Pagination = ({ handlePage, page, setPage, totalItems }) => (
       <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
         <div>
           <p className="text-sm text-gray-700">
-            Showing{" "}
+            Showing
             <span className="font-medium">
               {(page - 1) * ITEMS_PER_PAGE + 1}
-            </span>{" "}
-            to{" "}
+            </span>
+            to
             <span className="font-medium">
               {page * ITEMS_PER_PAGE > totalItems
                 ? totalItems
                 : page * ITEMS_PER_PAGE}
-            </span>{" "}
+            </span>
             of <span className="font-medium">{totalItems}</span> results
           </p>
         </div>
@@ -285,6 +284,7 @@ const Pagination = ({ handlePage, page, setPage, totalItems }) => (
               length: Math.ceil(totalItems / ITEMS_PER_PAGE),
             }).map((el, index) => (
               <div
+                key={index}
                 onClick={(e) => setPage(index + 1)}
                 aria-current="page"
                 className={`relative z-10 inline-flex items-center ${
@@ -371,19 +371,6 @@ const MobileFilter = ({
               {/* Filters */}
               <form className="mt-4 border-t border-gray-200">
                 <h3 className="sr-only">Categories</h3>
-                {/* <ul
-                role="list"
-                className="px-2 py-3 font-medium text-gray-900"
-              >
-                {subCategories.map((category) => (
-                  <li key={category.name}>
-                    <a href={category.href} className="block px-2 py-3">
-                      {category.name}
-                    </a>
-                  </li>
-                ))}
-              </ul> */}
-
                 {filters.map((section) => (
                   <Disclosure
                     as="div"
@@ -520,11 +507,8 @@ const ProductGrid = ({ products }) => {
 
           <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
             {products.map((product) => (
-              <Link to={`/ProductDetail/${product.id}`}>
-                <div
-                  key={product.id}
-                  className="group relative overflow-hidden"
-                >
+              <Link key={product.id} to={`/ProductDetail/${product.id}`}>
+                <div className="group relative overflow-hidden">
                   <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
                     <img
                       src={product.thumbnail}
@@ -535,17 +519,9 @@ const ProductGrid = ({ products }) => {
                   <div className="mt-4 flex justify-between">
                     <div>
                       <h3 className="text-base text-gray-700 font-semibold">
-                        <Link to={product.thumbnail}>
-                          <span
-                            aria-hidden="true"
-                            className="absolute inset-0"
-                          />
-                          {product.title}
-                        </Link>
+                        <span aria-hidden="true" className="absolute inset-0" />
+                        {product.title}
                       </h3>
-                      {/* <p className="mt-1 text-sm text-gray-500">
-                    {product.brand}
-                  </p> */}
                       <Rating
                         emptySymbol={
                           <FontAwesomeIcon

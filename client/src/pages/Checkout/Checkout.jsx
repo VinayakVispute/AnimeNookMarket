@@ -60,7 +60,6 @@ const Checkout = () => {
   };
 
   const onSubmit = (data) => {
-    console.log({ ...user, addresses: [...user.addresses, data] });
     dispatch(
       updateUserAsync({ ...user, addresses: [...user.addresses, data] })
     );

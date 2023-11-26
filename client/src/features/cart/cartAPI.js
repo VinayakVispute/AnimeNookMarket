@@ -1,69 +1,93 @@
+import axios from "axios";
+axios.defaults.withCredentials = true; // Include credentials in requests
+
 export function addTOCart(item) {
-  return new Promise(async (resolve) => {
-    const response = await fetch("http://localhost:8000/cart", {
-      method: "POST",
-      body: JSON.stringify(item),
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    });
-    const data = await response.json();
-    //TODO: On Server it will only return some of the relevant data only  (Not Password)
-    resolve({ data });
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await axios.post("http://localhost:8000/cart", item, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+
+      // TODO: On Server, it will only return some of the relevant data only (Not Password)
+      resolve({ data: response.data });
+    } catch (error) {
+      reject(error);
+    }
   });
 }
 
 export function fetchItemsByUserId() {
-  return new Promise(async (resolve) => {
-    //TODO :we will not hard-code server URL Here
-    const response = await fetch("http://localhost:8000/cart/");
-    const data = await response.json();
-    resolve({ data });
+  return new Promise(async (resolve, reject) => {
+    try {
+      // TODO: We will not hard-code the server URL here
+      const response = await axios.get("http://localhost:8000/cart/");
+      resolve({ data: response.data });
+    } catch (error) {
+      reject(error);
+    }
   });
 }
+
 export function updateCart(update) {
-  return new Promise(async (resolve) => {
-    //TODO :we will not hard-code server URL Here
-    const response = await fetch(`http://localhost:8000/cart/${update.id}`, {
-      method: "PATCH",
-      body: JSON.stringify(update),
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    });
-    const data = await response.json();
-    resolve({ data });
+  return new Promise(async (resolve, reject) => {
+    try {
+      // TODO: We will not hard-code the server URL here
+      const response = await axios.patch(
+        `http://localhost:8000/cart/${update.id}`,
+        update,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      resolve({ data: response.data });
+    } catch (error) {
+      reject(error);
+    }
   });
 }
 
 export function deleteItemsfromCart(productId) {
-  return new Promise(async (resolve) => {
-    //TODO :we will not hard-code server URL Here
-    const response = await fetch(`http://localhost:8000/cart/${productId}`, {
-      method: "DELETE",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    });
-    const data = await response.json();
-    resolve({ data: { id: productId } });
+  return new Promise(async (resolve, reject) => {
+    try {
+      // TODO: We will not hard-code the server URL here
+      const response = await axios.delete(
+        `http://localhost:8000/cart/${productId}`,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      resolve({ data: { id: productId } });
+    } catch (error) {
+      reject(error);
+    }
   });
 }
 
 export function resetCart() {
-  //get all cart items of a user
-  //delete all cart items of a user by for loop
-  return new Promise(async (resolve) => {
-    //TODO :we will not hard-code server URL Here
-    const response = await fetchItemsByUserId();
-    const userCartItems = response.data;
-    console.log("userCartItems", userCartItems);
-    for (let item of userCartItems) {
-      await deleteItemsfromCart(item.id);
+  return new Promise(async (resolve, reject) => {
+    try {
+      // TODO: We will not hard-code the server URL here
+      const response = await fetchItemsByUserId();
+      const userCartItems = response.data;
+
+      for (let item of userCartItems) {
+        await deleteItemsfromCart(item.id);
+      }
+
+      resolve({ status: "success" });
+    } catch (error) {
+      reject(error);
     }
-    resolve({ status: "success" });
   });
 }

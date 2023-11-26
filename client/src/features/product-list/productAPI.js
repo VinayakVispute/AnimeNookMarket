@@ -1,99 +1,120 @@
-export function fetchAllProducts() {
-  return new Promise(async (resolve) => {
-    //TODO :we will not hard-code server URL Here
-    // TODO : Server will filter deleted products
+import axios from "axios";
 
-    const response = await fetch("http://localhost:8000/products");
-    const data = await response.json();
-    resolve({ data });
+export function fetchAllProducts() {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await axios.get("http://localhost:8000/products", {
+        withCredentials: true,
+      });
+      resolve({ data: response.data });
+    } catch (error) {
+      reject(error);
+    }
   });
 }
 
 export function fetchProductsByFilter(filter, sort, pagination) {
-  //filter = {"category":["smartphone","laptop"]}
-  //sort  ={_sort:"price","_order"="desc"}
-  //paginator = {_page:1,_limit:10}
-  //TODO : Server will be supporting mutiple filters and values
-  // TODO : Server will filter deleted products in case of non admin
-  console.log(filter);
-  let queryString = "";
+  let params = {};
   for (let key in filter) {
     const values = filter[key];
 
     if (values.length > 0) {
-      values.forEach((value) => {
-        queryString += `${key}=${value}&`;
-      });
+      params[key] = values;
     }
   }
 
-  for (let key in sort) {
-    queryString += `${key}=${sort[key]}&`;
-  }
-  for (let key in pagination) {
-    queryString += `${key}=${pagination[key]}&`;
-  }
+  params = { ...params, ...sort, ...pagination };
 
-  return new Promise(async (resolve) => {
-    //TODO :we will not hard-code server URL Here
-    const response = await fetch(
-      "http://localhost:8000/products?" + queryString
-    );
-    const data = await response.json();
-    resolve({ data });
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await axios.get("http://localhost:8000/products", {
+        params,
+        withCredentials: true,
+      });
+      resolve({ data: response.data });
+    } catch (error) {
+      reject(error);
+    }
   });
 }
 
 export function fetchBrands() {
-  return new Promise(async (resolve) => {
-    const response = await fetch("http://localhost:8000/brands");
-    const data = await response.json();
-    resolve({ data });
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await axios.get("http://localhost:8000/brands", {
+        withCredentials: true,
+      });
+      resolve({ data: response.data });
+    } catch (error) {
+      reject(error);
+    }
   });
 }
+
 export function fetchCategories() {
-  return new Promise(async (resolve) => {
-    const response = await fetch("http://localhost:8000/categories");
-    const data = await response.json();
-    resolve({ data });
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await axios.get("http://localhost:8000/categories", {
+        withCredentials: true,
+      });
+      resolve({ data: response.data });
+    } catch (error) {
+      reject(error);
+    }
   });
 }
+
 export function fetchProductById(id) {
-  return new Promise(async (resolve) => {
-    const response = await fetch("http://localhost:8000/products/" + id);
-    const data = await response.json();
-    resolve({ data });
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await axios.get(`http://localhost:8000/products/${id}`, {
+        withCredentials: true,
+      });
+      resolve({ data: response.data });
+    } catch (error) {
+      reject(error);
+    }
   });
 }
+
 export function createProduct(productData) {
-  return new Promise(async (resolve) => {
-    const response = await fetch("http://localhost:8000/products", {
-      method: "POST",
-      body: JSON.stringify(productData),
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    });
-    const data = await response.json();
-    resolve({ data });
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/products",
+        productData,
+        {
+          withCredentials: true,
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      resolve({ data: response.data });
+    } catch (error) {
+      reject(error);
+    }
   });
 }
+
 export function updateProduct(updateProductData) {
-  return new Promise(async (resolve) => {
-    //TODO :we will not hard-code server URL Here
-    const response = await fetch(
-      `http://localhost:8000/products/${updateProductData.id}`,
-      {
-        method: "PATCH",
-        body: JSON.stringify(updateProductData),
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    const data = await response.json();
-    resolve({ data });
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await axios.patch(
+        `http://localhost:8000/products/${updateProductData.id}`,
+        updateProductData,
+        {
+          withCredentials: true,
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      resolve({ data: response.data });
+    } catch (error) {
+      reject(error);
+    }
   });
 }

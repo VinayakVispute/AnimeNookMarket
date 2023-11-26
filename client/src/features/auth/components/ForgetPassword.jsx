@@ -20,7 +20,6 @@ const ForgetPassword = () => {
   const onSubmit = (data) => {
     // dispatch(forgetPasswordAsync({ email: data.email }));
     // TODO: Implementation to be done on backend
-    console.log(data);
   };
 
   return (

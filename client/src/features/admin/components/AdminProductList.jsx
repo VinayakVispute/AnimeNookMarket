@@ -295,6 +295,7 @@ const Pagination = ({ handlePage, page, setPage, totalItems }) => (
               length: Math.ceil(totalItems / ITEMS_PER_PAGE),
             }).map((el, index) => (
               <div
+                key={index}
                 onClick={(e) => setPage(index + 1)}
                 aria-current="page"
                 className={`relative z-10 inline-flex items-center ${
@@ -387,18 +388,6 @@ const MobileFilter = ({
               {/* Filters */}
               <form className="mt-4 border-t border-gray-200">
                 <h3 className="sr-only">Categories</h3>
-                {/* <ul
-                role="list"
-                className="px-2 py-3 font-medium text-gray-900"
-              >
-                {subCategories.map((category) => (
-                  <li key={category.name}>
-                    <a href={category.href} className="block px-2 py-3">
-                      {category.name}
-                    </a>
-                  </li>
-                ))}
-              </ul> */}
 
                 {filters.map((section) => (
                   <Disclosure
@@ -536,11 +525,8 @@ const ProductGrid = ({ products }) => {
 
           <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
             {products.map((product) => (
-              <Link to={`/ProductDetail/${product.id}`}>
-                <div
-                  key={product.id}
-                  className="group relative overflow-hidden"
-                >
+              <Link to={`/ProductDetail/${product.id}`} key={product.id}>
+                <div className="group relative overflow-hidden">
                   <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
                     <img
                       src={product.thumbnail}
@@ -604,7 +590,7 @@ const ProductGrid = ({ products }) => {
                       <span className="block">Deleted</span>
                     </div>
                   )}
-                  {product.stock <=0 && (
+                  {product.stock <= 0 && (
                     <div className="absolute  bg-yellow-600 text-center text-white font-semibold py-1 right-[0px] top-[50%] w-full">
                       <span className="block">Out Of Stock</span>
                     </div>

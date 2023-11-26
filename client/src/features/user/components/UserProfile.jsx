@@ -22,13 +22,13 @@ const UserProfile = () => {
   useEffect(() => {
     dispatch(fetchAllCountriesAsync());
   }, [dispatch]);
-
   const countries = useSelector(selectAllCountries);
+
+  console.log(user);
 
   const [selectedAddress, setSelectedAddress] = useState(null);
 
   const handleAddressEdit = (index) => {
-    console.log("handleAddressEdit", index);
     setShowAddForm(false);
     if (selectedAddress === index) {
       setSelectedAddress(null);
@@ -42,12 +42,11 @@ const UserProfile = () => {
       setValue("city", address.city);
       setValue("state", address.state);
       setValue("pinCode", address.pinCode);
-      setValue("country", address.country );
+      setValue("country", address.country);
     }
   };
 
   const handleAddressChange = (updatedAddress, index) => {
-    console.log("handleAddressChange", updatedAddress, index);
     const newUser = { ...user, addresses: [...user.addresses] }; //shallow copy of user object
     newUser.addresses.splice(index, 1, updatedAddress);
     dispatch(updateUserAsync(newUser));
@@ -55,7 +54,6 @@ const UserProfile = () => {
   };
 
   const handleAddressRemove = (index) => {
-    console.log("handleAddressRemove", index);
     const newUser = { ...user, addresses: [...user.addresses] }; //shallow copy of user object
     dispatch(updateUserAsync(newUser));
   };
@@ -110,7 +108,7 @@ const UserProfile = () => {
       <ul role="list" className="divide-y divide-gray-100 mt-4">
         {user.addresses.map((address, index) => (
           <>
-            <div className="lg:col-span-3">
+            <div className="lg:col-span-3" key={index}>
               {selectedAddress === index && (
                 <form
                   className="bg-white p-5 mt-12"

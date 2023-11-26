@@ -7,7 +7,7 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   ArrowDownIcon,
-  ArrowUpIcon
+  ArrowUpIcon,
 } from "@heroicons/react/24/outline";
 import {
   fetchAllOrdersAsync,
@@ -39,16 +39,13 @@ const AdminOrders = () => {
 
   const handleEdit = (order) => {
     seteditableOrderId(order.id);
-    console.log("Edit order", order.id);
   };
   const handleStatusUpdate = async (status, order) => {
     const updateOrder = { ...order, status: status };
     await dispatch(updateOrderAsync(updateOrder));
     seteditableOrderId(null);
   };
-  const handleShow = (order) => {
-    console.log("Show order", order.id);
-  };
+  const handleShow = (order) => {};
 
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
@@ -78,7 +75,6 @@ const AdminOrders = () => {
   };
 
   const handleSort = (option) => {
-    console.log(option);
     const sort = { _sort: option.sort, _order: option.order };
     setSort(sort);
   };
@@ -215,49 +211,49 @@ const AdminOrders = () => {
         <table className="bg-gray-100 min-h-screen min-w-full">
           <thead>
             <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-            <th
+              <th
                 className="py-3 px-6 text-left cursor-pointer flex items-center justify-center"
                 onClick={(e) =>
-                    handleSort({
-                        sort: "id",
-                        order: sort._order === "asc" ? "desc" : "asc",
-                    })
+                  handleSort({
+                    sort: "id",
+                    order: sort._order === "asc" ? "desc" : "asc",
+                  })
                 }
-            >
+              >
                 Order No.
                 {sort._sort === "id" && (
-                    <>
-                        {sort._order === "asc" ? (
-                            <ArrowUpIcon className="h-4 w-4 inline" />
-                        ) : (
-                            <ArrowDownIcon className="h-4 w-4 inline" />
-                        )}
-                    </>
+                  <>
+                    {sort._order === "asc" ? (
+                      <ArrowUpIcon className="h-4 w-4 inline" />
+                    ) : (
+                      <ArrowDownIcon className="h-4 w-4 inline" />
+                    )}
+                  </>
                 )}
-            </th>
+              </th>
               <th className="py-3 px-6 text-left">Items</th>
               <th className="py-3 px-6 text-center">Qty</th>
               <th className="py-3 px-6 text-center">Amt</th>
               <th
                 className="py-3 px-6 text-left cursor-pointer flex items-center justify-center"
                 onClick={(e) =>
-                    handleSort({
-                        sort: "totalAmount",
-                        order: sort._order === "asc" ? "desc" : "asc",
-                    })
+                  handleSort({
+                    sort: "totalAmount",
+                    order: sort._order === "asc" ? "desc" : "asc",
+                  })
                 }
-            >
-              Total Amt:
+              >
+                Total Amt:
                 {sort._sort === "totalAmount" && (
-                    <>
-                        {sort._order === "asc" ? (
-                            <ArrowUpIcon className="h-4 w-4 inline" />
-                        ) : (
-                            <ArrowDownIcon className="h-4 w-4 inline" />
-                        )}
-                    </>
+                  <>
+                    {sort._order === "asc" ? (
+                      <ArrowUpIcon className="h-4 w-4 inline" />
+                    ) : (
+                      <ArrowDownIcon className="h-4 w-4 inline" />
+                    )}
+                  </>
                 )}
-            </th>
+              </th>
               <th className="py-3 px-6 text-center">Status</th>
               <th className="py-3 px-6 text-center">Address</th>
               <th className="py-3 px-6 text-center">Actions</th>
@@ -316,7 +312,6 @@ const AdminOrders = () => {
                       prefix="$ "
                       thousandSeparator
                     />
-                    {console.log(editableOrderId === order.id)}
                   </td>
                   <td className="py-3 px-6 text-center">
                     {editableOrderId === order.id ? (
@@ -488,6 +483,7 @@ const AdminOrders = () => {
                         length: Math.ceil(totalOrders / ITEMS_PER_PAGE),
                       }).map((el, index) => (
                         <div
+                          key={index}
                           onClick={(e) => setPage(index + 1)}
                           aria-current="page"
                           className={`relative z-10 inline-flex items-center ${

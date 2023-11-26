@@ -30,7 +30,6 @@ export const fetchItemsByUserIdAsync = createAsyncThunk(
 export const updateCartAsync = createAsyncThunk(
   "cart/updateCart",
   async (update) => {
-    console.log("Update cart", update);
     const response = await updateCart(update);
     return response.data;
   }
