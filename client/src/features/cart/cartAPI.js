@@ -23,7 +23,7 @@ export function fetchItemsByUserId() {
   return new Promise(async (resolve, reject) => {
     try {
       // TODO: We will not hard-code the server URL here
-      const response = await axios.get("http://localhost:8000/cart/");
+      const response = await axios.get("http://localhost:8000/cart");
       resolve({ data: response.data });
     } catch (error) {
       reject(error);
@@ -35,9 +35,11 @@ export function updateCart(update) {
   return new Promise(async (resolve, reject) => {
     try {
       // TODO: We will not hard-code the server URL here
+      const { id, ...updatedCart } = update;
+      console.log("id", id, "updatedCart", updatedCart);
       const response = await axios.patch(
         `http://localhost:8000/cart/${update.id}`,
-        update,
+        updatedCart,
         {
           headers: {
             Accept: "application/json",
@@ -53,12 +55,12 @@ export function updateCart(update) {
   });
 }
 
-export function deleteItemsfromCart(productId) {
+export function deleteItemsfromCart(itemId) {
   return new Promise(async (resolve, reject) => {
     try {
       // TODO: We will not hard-code the server URL here
       const response = await axios.delete(
-        `http://localhost:8000/cart/${productId}`,
+        `http://localhost:8000/cart/${itemId}`,
         {
           headers: {
             Accept: "application/json",
@@ -66,8 +68,7 @@ export function deleteItemsfromCart(productId) {
           },
         }
       );
-
-      resolve({ data: { id: productId } });
+      resolve({ data: { id: itemId } });
     } catch (error) {
       reject(error);
     }

@@ -50,24 +50,26 @@ const ProductDetails = () => {
   }, [dispatch, productId]);
 
   const handleCart = () => {
-    const itemIndex = items.findIndex((item) => item.productId === product.id);
+    const itemIndex = items.findIndex((item) => item.product.id === product.id);
+    console.log("items", items, "productid", product.id);
+    console.log("itemIndex", itemIndex);
     if (itemIndex >= 0) {
       // Item with the same id found, perform your action here
       const existingItem = items[itemIndex];
 
       // Example: Increase the quantity of the existing item
       const updatedItems = {
-        ...existingItem,
+        id: existingItem.id,
         quantity: existingItem.quantity + 1,
       };
       dispatch(updateCartAsync(updatedItems));
     } else {
       // Item with the same id not found, add it to the cart
-      const { id, ...productWithoutId } = product;
+      const { id } = product;
+
       dispatch(
         addTOCartAsync({
-          ...productWithoutId,
-          productId: product.id,
+          product: id,
           quantity: 1,
         })
       );
@@ -312,7 +314,7 @@ const ProductDetails = () => {
                   </RadioGroup>
                 </div>
 
-                {items.findIndex((item) => item.productId === product.id) >=
+                {items.findIndex((item) => item.product.id === product.id) >=
                 0 ? (
                   <button
                     className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-yellow-600 px-8 py-3 text-base font-medium text-white hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2"

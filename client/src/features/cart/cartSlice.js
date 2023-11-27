@@ -36,8 +36,9 @@ export const updateCartAsync = createAsyncThunk(
 );
 export const deleteItemsfromCartAsync = createAsyncThunk(
   "cart/deleteItemsfromCart",
-  async (productId) => {
-    const response = await deleteItemsfromCart(productId);
+  async (itemId) => {
+    const response = await deleteItemsfromCart(itemId);
+    console.log(response.data);
     return response.data;
   }
 );
@@ -56,24 +57,25 @@ export const cartSlice = createSlice({
       })
       .addCase(addTOCartAsync.fulfilled, (state, action) => {
         state.status = "idle";
-        state.items.push(action.payload);
+        state.items.push(action.payload.data);
       })
       .addCase(fetchItemsByUserIdAsync.pending, (state) => {
         state.status = "loading";
       })
       .addCase(fetchItemsByUserIdAsync.fulfilled, (state, action) => {
         state.status = "idle";
-        state.items = action.payload;
+        state.items = action.payload.data;
       })
       .addCase(updateCartAsync.pending, (state) => {
         state.status = "loading";
       })
       .addCase(updateCartAsync.fulfilled, (state, action) => {
         state.status = "idle";
-        const index = state.items.findIndex(
-          (item) => item.id === action.payload.id
-        );
-        state.items[index] = action.payload;
+
+        const index = state.items.findIndex((item) => {
+          return item.id === action.payload.data.id;
+        });
+        state.items[index] = action.payload.data;
       })
       .addCase(deleteItemsfromCartAsync.pending, (state) => {
         state.status = "loading";
@@ -81,8 +83,9 @@ export const cartSlice = createSlice({
       .addCase(deleteItemsfromCartAsync.fulfilled, (state, action) => {
         state.status = "idle";
         const index = state.items.findIndex(
-          (item) => item.id === action.payload
+          (item) => item.id === action.payload.id
         );
+        console.log("index", index, "state.items", state.items);
         state.items.splice(index, 1);
       })
       .addCase(resetCartAsync.pending, (state) => {

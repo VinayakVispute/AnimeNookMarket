@@ -57,6 +57,7 @@ const categoryRoutes = require("./routes/categoryRoutes");
 const brandRoutes = require("./routes/brandRoutes");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
+const cartRoutes = require("./routes/cartRoutes");
 
 // Define a simple route to check if the server is connected
 app.get("/", (req, res) => {
@@ -119,10 +120,8 @@ passport.use(
 passport.use(
   "jwt",
   new JwtStrategy(opts, async function (jwt_payload, done) {
-    console.log("jwt_payload", jwt_payload);
     try {
       const user = await User.findOne({ _id: jwt_payload.id });
-      console.log("user", user);
       if (user) {
         return done(null, sanitizeUser(user), { message: "Logged in." });
       } else {
@@ -158,6 +157,7 @@ app.use("/products", isAuthenticated(), productRoutes);
 app.use("/brands", isAuthenticated(), brandRoutes);
 app.use("/categories", isAuthenticated(), categoryRoutes);
 app.use("/users", isAuthenticated(), userRoutes);
+app.use("/cart", isAuthenticated(), cartRoutes);
 app.use("/auth", authRoutes);
 
 // Start the server and connect to the database
