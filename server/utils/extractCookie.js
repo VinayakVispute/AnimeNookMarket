@@ -3,7 +3,6 @@ const ExtractCookie = (req) => {
   if (req && req.cookies) {
     token = req.cookies["jwt"];
   }
-  console.log("jwt", token);
   return token;
 };
 

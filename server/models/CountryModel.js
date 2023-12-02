@@ -16,6 +16,18 @@ countrySchema.pre("save", function (next) {
   this.value = this.label.toLowerCase().replace(/\s+/g, "-");
   next();
 });
-const Country = mongoose.model("Country", countrySchema);
 
-module.exports = Country;
+const virtual = countrySchema.virtual("id");
+virtual.get(function () {
+  return this._id;
+});
+
+countrySchema.set("toJSON", {
+  virtuals: true,
+  versionKey: false,
+  transform: function (doc, ret) {
+    delete ret._id;
+  },
+});
+
+module.exports = mongoose.model("Country", countrySchema);

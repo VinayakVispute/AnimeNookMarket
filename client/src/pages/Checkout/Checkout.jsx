@@ -16,7 +16,10 @@ import {
   createOrderAsync,
   selectCurrentOrderPlaced,
 } from "../../features/orders/orderSlice";
-import { selectUserInfo, updateUserAsync } from "../../features/user/userSlice";
+import {
+  addAddressToUserAsync,
+  selectUserInfo,
+} from "../../features/user/userSlice";
 import { discountedPrice } from "../../app/constants";
 
 const Checkout = () => {
@@ -41,7 +44,7 @@ const Checkout = () => {
   const items = useSelector(selectItems);
   const currentOrderPlaced = useSelector(selectCurrentOrderPlaced);
   const totalAmount = items.reduce(
-    (total, item) => discountedPrice(item) * item.quantity + total,
+    (total, item) => discountedPrice(item.product) * item.quantity + total,
     0
   );
   const totalItems = items.reduce((total, item) => item.quantity + total, 0);
@@ -51,7 +54,7 @@ const Checkout = () => {
     if (newQuantity === 0) {
       dispatch(deleteItemsfromCartAsync(item.id));
     } else {
-      dispatch(updateCartAsync({ ...item, quantity: newQuantity }));
+      dispatch(updateCartAsync({ id: item.id, quantity: newQuantity }));
     }
   };
 
@@ -60,9 +63,7 @@ const Checkout = () => {
   };
 
   const onSubmit = (data) => {
-    dispatch(
-      updateUserAsync({ ...user, addresses: [...user.addresses, data] })
-    );
+    dispatch(addAddressToUserAsync(data));
     reset();
   };
   const handleAddress = (e) => {
@@ -78,9 +79,9 @@ const Checkout = () => {
       totalItems,
       selectedAddress,
       paymentMethod,
-      user,
-      status: "Pending",
+      user: user.id,
     };
+
     dispatch(createOrderAsync(order));
     //TODO : redirect to successpage
     //TODO : clear the cart
@@ -421,12 +422,12 @@ const Checkout = () => {
           <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
             <div className="flow-root">
               <ul role="list" className="-my-6 divide-y divide-gray-200">
-                {items.map((product) => (
-                  <li key={product.id} className="flex py-6">
+                {items.map((item) => (
+                  <li key={item.id} className="flex py-6">
                     <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                       <img
-                        src={product.thumbnail}
-                        alt={product.title}
+                        src={item.product.thumbnail}
+                        alt={item.product.title}
                         className="h-full w-full object-cover object-center"
                       />
                     </div>
@@ -435,14 +436,16 @@ const Checkout = () => {
                       <div>
                         <div className="flex justify-between text-base font-medium text-gray-900">
                           <h3>
-                            <Link to={`/ProductDetail/${product.id}`}>
-                              {product.title}
+                            <Link to={`/ProductDetail/${item.id}`}>
+                              {item.product.title}
                             </Link>
                           </h3>
-                          <p className="ml-4">$ {discountedPrice(product)}</p>
+                          <p className="ml-4">
+                            $ {discountedPrice(item.product)}
+                          </p>
                         </div>
                         <p className="mt-1 text-sm text-gray-500">
-                          {product.brand}
+                          {item.product.brand.label}
                         </p>
                       </div>
                       <div className="flex flex-1 items-end justify-between text-sm">
@@ -455,8 +458,8 @@ const Checkout = () => {
                           </label>
                           <select
                             className="mx-4"
-                            value={product.quantity}
-                            onChange={(e) => handleQualityChange(e, product)}
+                            value={item.quantity}
+                            onChange={(e) => handleQualityChange(e, item)}
                           >
                             <option value="0">0(Delete)</option>
                             <option value="1">1</option>
@@ -471,14 +474,14 @@ const Checkout = () => {
                             <option value="10">10</option>
                           </select>
 
-                          {/* {product.quantity} */}
+                          {/* {item.quantity} */}
                         </div>
 
                         <div className="flex">
                           <button
                             type="button"
                             className="font-medium text-indigo-600 hover:text-indigo-500"
-                            onClick={(e) => handleRemove(e, product.id)}
+                            onClick={(e) => handleRemove(e, item.id)}
                           >
                             Remove
                           </button>

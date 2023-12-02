@@ -25,7 +25,7 @@ export const countriesSlice = createSlice({
       })
       .addCase(fetchAllCountriesAsync.fulfilled, (state, action) => {
         state.status = "idle";
-        state.countries = action.payload;
+        state.countries = action.payload.data;
       });
   },
 });

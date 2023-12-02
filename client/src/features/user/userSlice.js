@@ -3,6 +3,9 @@ import {
   fetchLoggedInUserOrders,
   updateUser,
   fetchLoggedInUser,
+  addAddressToUser,
+  updateAddress,
+  deleteAddress,
 } from "./userAPI";
 
 const initialState = {
@@ -34,6 +37,30 @@ export const updateUserAsync = createAsyncThunk(
   }
 );
 
+export const addAddressToUserAsync = createAsyncThunk(
+  "user/addAddressToUser",
+  async (address) => {
+    const response = await addAddressToUser(address);
+    return response.data;
+  }
+);
+
+export const updateAddressAsync = createAsyncThunk(
+  "user/updateAddress",
+  async (updatedDetails) => {
+    const response = await updateAddress(updatedDetails);
+    return response.data;
+  }
+);
+
+export const deleteAddressAsync = createAsyncThunk(
+  "user/deleteAddress",
+  async (addressId) => {
+    const response = await deleteAddress(addressId);
+    return response.data;
+  }
+);
+
 export const userSlice = createSlice({
   name: "user",
   initialState,
@@ -47,7 +74,7 @@ export const userSlice = createSlice({
         state.status = "idle";
 
         //this info can be different or more from loggined user from auth
-        state.userOrders = action.payload;
+        state.userOrders = action.payload.data.orders;
       })
       .addCase(fetchLoggedInUserAsync.pending, (state) => {
         state.status = "loading";
@@ -63,6 +90,27 @@ export const userSlice = createSlice({
         state.status = "idle";
         //this info can be different or more from loggined user from auth
         state.userInfo = action.payload.user;
+      })
+      .addCase(addAddressToUserAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(addAddressToUserAsync.fulfilled, (state, action) => {
+        state.status = "idle";
+        state.userInfo = action.payload.data;
+      })
+      .addCase(updateAddressAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(updateAddressAsync.fulfilled, (state, action) => {
+        state.status = "idle";
+        state.userInfo = action.payload.data;
+      })
+      .addCase(deleteAddressAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(deleteAddressAsync.fulfilled, (state, action) => {
+        state.status = "idle";
+        state.userInfo = action.payload.data;
       });
   },
 });

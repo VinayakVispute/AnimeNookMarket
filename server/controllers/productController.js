@@ -21,6 +21,8 @@ const createProduct = async (req, res) => {
       stock,
     } = req.body;
 
+    console.log(req.files);
+
     // Assuming you're handling file uploads and the files are available in req.files
     const thumbnailFile = req.files.thumbnail;
     const imagesFiles = req.files.images;
@@ -39,35 +41,62 @@ const createProduct = async (req, res) => {
         message: "Thumbnail file format not supported",
       });
     }
-
-    if (
-      !imagesFiles.every((file) =>
-        isFileTypeSupported(
-          file.name.split(".")[1].toLowerCase(),
-          supportedTypes
-        )
-      )
-    ) {
-      return res.status(400).json({
-        success: false,
-        message: "Some image files have an unsupported format",
-      });
-    }
-
     // Upload thumbnail to Cloudinary
     const thumbnailResponse = await uploadFileToCloudinary(
       thumbnailFile,
       "AnimeNookMarket"
     );
 
-    // Upload images to Cloudinary
-    const imagesResponse = await Promise.all(
-      imagesFiles.map((imageFile) =>
-        uploadFileToCloudinary(imageFile, "AnimeNookMarket")
-      )
-    );
+    let imagesResponse = [];
+
+    // Check if there are images
+    if (imagesFiles) {
+      // Check if there is more than one image or only one
+      if (Array.isArray(imagesFiles)) {
+        // Validate file types for each image
+        if (
+          !imagesFiles.every((file) =>
+            isFileTypeSupported(
+              file.name.split(".")[1].toLowerCase(),
+              supportedTypes
+            )
+          )
+        ) {
+          return res.status(400).json({
+            success: false,
+            message: "Some image files have an unsupported format",
+          });
+        }
+
+        // Upload images to Cloudinary
+        imagesResponse = await Promise.all(
+          imagesFiles.map((imageFile) =>
+            uploadFileToCloudinary(imageFile, "AnimeNookMarket")
+          )
+        );
+      } else {
+        // Validate file type for a single image
+        if (
+          !isFileTypeSupported(
+            imagesFiles.name.split(".")[1].toLowerCase(),
+            supportedTypes
+          )
+        ) {
+          return res.status(400).json({
+            success: false,
+            message: "Image file format not supported",
+          });
+        }
+
+        // Upload a single image to Cloudinary
+        imagesResponse = [
+          await uploadFileToCloudinary(imagesFiles, "AnimeNookMarket"),
+        ];
+      }
+    }
+
     // Save the product to the database
-    const newProduct = await Product.create({
+    const newProduct = await new Product({
       title,
       price,
       description,
@@ -78,15 +107,14 @@ const createProduct = async (req, res) => {
       stock,
       thumbnail: thumbnailResponse.data.secure_url,
       images: imagesResponse.map((image) => image.data.secure_url),
-    });
+    }).populate("category brand");
 
-    // Save the product to the database
-    // await product.save();
+    const product = await newProduct.save();
 
     return res.status(200).json({
       success: true,
       message: "Product added successfully",
-      newProduct,
+      product,
     });
   } catch (error) {
     console.error("Error creating product:", error);
@@ -100,7 +128,7 @@ const createProduct = async (req, res) => {
 const getAllProducts = async (req, res) => {
   try {
     // Fetch all products from the database
-    const products = await Product.find();
+    const products = await Product.find().populate("category brand");
 
     return res.status(200).json({
       success: true,
@@ -120,7 +148,9 @@ const getProductById = async (req, res) => {
 
   try {
     // Find the product by ID in the database
-    const product = await Product.findById(productId);
+    const product = await Product.findById(productId).populate(
+      "category brand"
+    );
 
     if (!product) {
       return res.status(404).json({
@@ -152,7 +182,7 @@ const updateProductById = async (req, res) => {
       productId,
       updateData,
       { new: true }
-    );
+    ).populate("category brand");
 
     if (!updatedProduct) {
       return res.status(404).json({

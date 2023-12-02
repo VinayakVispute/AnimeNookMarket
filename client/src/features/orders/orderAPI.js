@@ -15,42 +15,40 @@ export function createOrder(order) {
       reject(error);
     }
   });
+  P;
 }
 
-export function fetchAllOrders(sort, pagination) {
-  let queryString = "";
-  for (let key in sort) {
-    queryString += `${key}=${sort[key]}&`;
-  }
-  for (let key in pagination) {
-    queryString += `${key}=${pagination[key]}&`;
-  }
-
+export function fetchAllOrders(sort, pagination, filter) {
+  let params = { ...sort, ...pagination, ...filter };
+  console.log(params);
   return new Promise(async (resolve, reject) => {
     try {
       const response = await axios.get("http://localhost:8000/orders", {
-        params: sort,
+        params,
         headers: {
           Accept: "application/json",
+
           "Content-Type": "application/json",
         },
       });
-      const totalOrders = response.headers["x-total-count"];
-      resolve({
-        data: { orders: response.data, totalOrders: parseInt(totalOrders) },
-      });
+      resolve({ data: response.data });
     } catch (error) {
+      console.log("error", error);
       reject(error);
     }
   });
 }
 
-export function updateOrder(order) {
+export function updateOrderStatus(order) {
   return new Promise(async (resolve, reject) => {
     try {
+      console.log("order", order);
+      const { orderId, status } = order;
+      console.log("orderId", orderId, "status", status);
+
       const response = await axios.patch(
-        `http://localhost:8000/orders/${order.id}`,
-        order,
+        `http://localhost:8000/orders/${orderId}`,
+        { status },
         {
           headers: {
             Accept: "application/json",
@@ -60,6 +58,7 @@ export function updateOrder(order) {
       );
       resolve({ data: response.data });
     } catch (error) {
+      console.log("error", error);
       reject(error);
     }
   });

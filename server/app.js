@@ -20,6 +20,18 @@ require("dotenv").config(); // Load environment variables from .env file
 const app = express();
 const port = process.env.PORT || 8000; // Set the port for the server
 
+// Parse incoming JSON requests
+app.use(express.json());
+
+// middleware for file uploads (express-fileupload)
+app.use(
+  fileUpload({
+    useTempFiles: true,
+    tempFileDir: "/tmp/",
+    debug: true, // Enable debugging for express-fileupload
+  })
+);
+
 //Import Middlewares
 const isAuthenticated = require("./middlewares/authentication");
 const sanitizeUser = require("./utils/sanitizeUser");
@@ -27,7 +39,6 @@ const sanitizeUser = require("./utils/sanitizeUser");
 // Enable CORS for all routes
 app.use(cors({ origin: true, credentials: true }));
 
-// Parse incoming JSON requests
 app.use(express.json());
 // For Parsing cookies
 app.use(cookieParser());
@@ -51,6 +62,10 @@ app.use(
 // Initialize Passport
 app.use(passport.initialize());
 app.use(passport.session());
+
+// For logging requests to the console (for development) using morgan middleware
+app.use(morgan("dev"));
+
 // Import routes
 const productRoutes = require("./routes/productRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
@@ -58,7 +73,8 @@ const brandRoutes = require("./routes/brandRoutes");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const cartRoutes = require("./routes/cartRoutes");
-
+const countryRoutes = require("./routes/countryRoutes");
+const orderRoutes = require("./routes/orderRoutes");
 // Define a simple route to check if the server is connected
 app.get("/", (req, res) => {
   res.send("Connected");
@@ -153,11 +169,14 @@ passport.deserializeUser(async function (user, cb) {
 cloudinary.cloudinaryConnect();
 
 // Routes
-app.use("/products", isAuthenticated(), productRoutes);
+app.use("/products", isAuthenticated(),productRoutes);
 app.use("/brands", isAuthenticated(), brandRoutes);
 app.use("/categories", isAuthenticated(), categoryRoutes);
 app.use("/users", isAuthenticated(), userRoutes);
 app.use("/cart", isAuthenticated(), cartRoutes);
+app.use("/orders", isAuthenticated(), orderRoutes);
+app.use("/countries", isAuthenticated(), countryRoutes);
+
 app.use("/auth", authRoutes);
 
 // Start the server and connect to the database

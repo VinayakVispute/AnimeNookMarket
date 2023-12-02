@@ -10,10 +10,11 @@ import { discountedPrice } from "../../app/constants";
 const Cart = () => {
   const dispatch = useDispatch();
   const items = useSelector(selectItems);
-  const totalAmount = items.reduce(
-    (total, item) => discountedPrice(item) * item.quantity + total,
-    0
-  );
+
+  const totalAmount = items.reduce((total, item) => {
+    return discountedPrice(item.product) * item.quantity + total;
+  }, 0);
+
   const totalItems = items.reduce((total, item) => item.quantity + total, 0);
 
   const handleQualityChange = (e, item) => {
@@ -63,7 +64,9 @@ const Cart = () => {
                             $ {discountedPrice(item.product)}
                           </p>
                         </div>
-                        <p className="mt-1 text-sm text-gray-500">{item.id}</p>
+                        <p className="mt-1 text-sm text-gray-500">
+                          {item.product.brand.label}
+                        </p>
                       </div>
                       <div className="flex flex-1 items-end justify-between text-sm">
                         <div className="text-gray-500">

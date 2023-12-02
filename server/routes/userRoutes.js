@@ -4,9 +4,18 @@ const {
   getUserById,
   updateUserById,
 } = require("../controllers/userController");
+const {
+  deleteAddress,
+  updateAddressById,
+} = require("../controllers/addressController");
+
+const { addAddressToUser } = require("../controllers/addressController");
 
 router.get("/user", getUserById);
-
-router.patch("/", updateUserById);
+router.post("/address", addAddressToUser);
+router
+  .patch("/address/:addressId", updateAddressById)
+  .patch("/", updateUserById);
+router.delete("/address/:addressId", deleteAddress);
 
 module.exports = router;

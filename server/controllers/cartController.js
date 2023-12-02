@@ -101,7 +101,6 @@ const deleteCardById = async (req, res) => {
         select: "-__v -value -createdAt -updatedAt",
       },
     });
-    console.log("deletedCart", deletedCart);
     if (!deletedCart) {
       return res.status(404).json({
         success: false,

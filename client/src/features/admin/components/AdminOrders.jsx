@@ -1,5 +1,9 @@
 import { Fragment, useEffect, useState } from "react";
-import { ITEMS_PER_PAGE, discountedPrice } from "../../../app/constants";
+import {
+  ITEMS_PER_PAGE,
+  discountedPrice,
+  formatOrderDate,
+} from "../../../app/constants";
 import {
   PencilIcon,
   EyeIcon,
@@ -13,7 +17,7 @@ import {
   fetchAllOrdersAsync,
   selectAllOrders,
   selectTotalOrders,
-  updateOrderAsync,
+  updateOrderStatusAsync,
 } from "../../orders/orderSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { NumericFormat } from "react-number-format";
@@ -27,11 +31,18 @@ const AdminOrders = () => {
   const totalOrders = useSelector(selectTotalOrders);
   const [editableOrderId, seteditableOrderId] = useState(null);
   const [sort, setSort] = useState({});
-
+  const [statusFilter, setStatusFilter] = useState(null);
   useEffect(() => {
-    const pagination = { _page: page, _limit: ITEMS_PER_PAGE };
-    dispatch(fetchAllOrdersAsync({ sort, pagination }));
-  }, [dispatch, page, sort]);
+    const pagination = { _page: page, _limit: 10 };
+    const filter = {};
+    if (statusFilter) {
+      filter.filter = statusFilter;
+    }
+
+    console.log("sort", sort, "pagination", pagination, "filter", filter);
+    dispatch(fetchAllOrdersAsync({ sort, pagination, filter }));
+    console.log("dispatched");
+  }, [dispatch, page, sort, statusFilter]);
 
   useEffect(() => {
     setPage(1);
@@ -41,8 +52,8 @@ const AdminOrders = () => {
     seteditableOrderId(order.id);
   };
   const handleStatusUpdate = async (status, order) => {
-    const updateOrder = { ...order, status: status };
-    await dispatch(updateOrderAsync(updateOrder));
+    const updateOrder = { orderId: order.id, status: status };
+    await dispatch(updateOrderStatusAsync(updateOrder));
     seteditableOrderId(null);
   };
   const handleShow = (order) => {};
@@ -84,7 +95,6 @@ const AdminOrders = () => {
       <div className="bg-white shadow-md rounded my-6  min-w-screen">
         <section className="bg-gray-50  flex items-center min-w-screen">
           <div className="max-w-full   w-full">
-            {/* Start coding here */}
             <div className="relative bg-white shadow-md  sm:rounded-lg">
               <div className="flex flex-col items-center justify-between p-4 space-y-3 md:flex-row md:space-y-0 md:space-x-4">
                 <div className="w-full md:w-1/2">
@@ -145,6 +155,7 @@ const AdminOrders = () => {
                             <Menu.Item>
                               {({ active }) => (
                                 <div
+                                  onClick={(e) => setStatusFilter("Pending")}
                                   className={classNames(
                                     active
                                       ? getStatusColor("Pending")
@@ -159,6 +170,7 @@ const AdminOrders = () => {
                             <Menu.Item>
                               {({ active }) => (
                                 <div
+                                  onClick={(e) => setStatusFilter("Dispatched")}
                                   className={classNames(
                                     active
                                       ? getStatusColor("Dispatched")
@@ -173,6 +185,7 @@ const AdminOrders = () => {
                             <Menu.Item>
                               {({ active }) => (
                                 <div
+                                  onClick={(e) => setStatusFilter("Delivered")}
                                   className={classNames(
                                     active
                                       ? getStatusColor("Delivered")
@@ -187,6 +200,7 @@ const AdminOrders = () => {
                             <Menu.Item>
                               {({ active }) => (
                                 <div
+                                  onClick={(e) => setStatusFilter("Cancelled")}
                                   className={classNames(
                                     active
                                       ? getStatusColor("Cancelled")
@@ -195,6 +209,21 @@ const AdminOrders = () => {
                                   )}
                                 >
                                   Cancelled
+                                </div>
+                              )}
+                            </Menu.Item>
+                            <Menu.Item>
+                              {({ active }) => (
+                                <div
+                                  onClick={(e) => setStatusFilter(null)}
+                                  className={classNames(
+                                    active
+                                      ? getStatusColor("All")
+                                      : getStatusColor("All"),
+                                    "block px-4 py-2 text-sm cursor-pointer"
+                                  )}
+                                >
+                                  All
                                 </div>
                               )}
                             </Menu.Item>
@@ -215,13 +244,13 @@ const AdminOrders = () => {
                 className="py-3 px-6 text-left cursor-pointer flex items-center justify-center"
                 onClick={(e) =>
                   handleSort({
-                    sort: "id",
+                    sort: "createdAt",
                     order: sort._order === "asc" ? "desc" : "asc",
                   })
                 }
               >
                 Order No.
-                {sort._sort === "id" && (
+                {sort._sort === "createdAt" && (
                   <>
                     {sort._order === "asc" ? (
                       <ArrowUpIcon className="h-4 w-4 inline" />
@@ -262,147 +291,154 @@ const AdminOrders = () => {
           <tbody className="text-gray-600 text-sm font-light">
             {orders &&
               orders.map((order, index) => (
-                <tr
-                  key={order.id}
-                  className="border-b border-gray-200 hover:bg-gray-100"
-                >
-                  <td className="py-3 px-8 text-center text-lg">{order.id}</td>
-                  <td className="py-3 px-6 text-left">
-                    {order.items.map((item) => (
-                      <div key={item.id} className="flex items-center">
-                        <div className="mr-2">
-                          <img
-                            className="w-14 h-14 rounded-lg"
-                            src={item.thumbnail}
-                            alt={item.title}
+                <>
+                  <span className="border-b border-gray-200 hover:bg-gray-100 whitespace-nowrap">
+                    <strong className="font-bold px-2">Order Date:</strong>
+                    {formatOrderDate(order.createdAt)}
+                  </span>
+                  <tr className="border-b border-gray-200 hover:bg-gray-100">
+                    <td className="py-3 px-8 text-center text-xs">
+                      {order.id}
+                    </td>
+                    <td className="py-3 px-6 text-left">
+                      {order.items.map((item) => (
+                        <div key={item.id} className="flex items-center">
+                          <div className="mr-2">
+                            <img
+                              className="w-14 h-14 rounded-lg"
+                              src={item.product.thumbnail}
+                              alt={item.product.title}
+                            />
+                          </div>
+                          <span>{item.product.title}</span>
+                        </div>
+                      ))}
+                    </td>
+                    <td className="py-3 px-6 text-center whitespace-nowrap">
+                      {order.items.map((item) => (
+                        <div key={item.id} className="py-1">
+                          <NumericFormat
+                            value={item.quantity}
+                            displayType={"text"}
+                            suffix=" Items"
+                            thousandSeparator
                           />
                         </div>
-                        <span>{item.title}</span>
-                      </div>
-                    ))}
-                  </td>
-                  <td className="py-3 px-6 text-center">
-                    {order.items.map((item) => (
-                      <div key={item.id} className="py-1">
-                        <NumericFormat
-                          value={item.quantity}
-                          displayType={"text"}
-                          suffix=" Items"
-                          thousandSeparator
-                        />
-                      </div>
-                    ))}
-                  </td>
-                  <td className="py-3 px-6 text-center">
-                    {order.items.map((item) => (
-                      <div key={item.id} className="py-1">
-                        <NumericFormat
-                          value={discountedPrice(item) * item.quantity}
-                          displayType={"text"}
-                          prefix="$ "
-                          thousandSeparator
-                        />
-                      </div>
-                    ))}
-                  </td>
-                  <td className="py-3 px-6 text-center">
-                    <NumericFormat
-                      value={order.totalAmount}
-                      displayType={"text"}
-                      prefix="$ "
-                      thousandSeparator
-                    />
-                  </td>
-                  <td className="py-3 px-6 text-center">
-                    {editableOrderId === order.id ? (
-                      <div className="flex">
-                        <select
+                      ))}
+                    </td>
+                    <td className="py-3 px-6 text-center whitespace-nowrap">
+                      {order.items.map((item) => (
+                        <div key={item.id} className="py-1">
+                          <NumericFormat
+                            value={
+                              discountedPrice(item.product) * item.quantity
+                            }
+                            displayType={"text"}
+                            prefix="$ "
+                            thousandSeparator
+                          />
+                        </div>
+                      ))}
+                    </td>
+                    <td className="py-3 px-6 text-center whitespace-nowrap">
+                      <NumericFormat
+                        value={order.totalAmount}
+                        displayType={"text"}
+                        prefix="$ "
+                        thousandSeparator
+                      />
+                    </td>
+                    <td className="py-3 px-6 text-center">
+                      {editableOrderId === order.id ? (
+                        <div className="flex">
+                          <select
+                            className={`py-1 px-3 rounded-full text-xs ${getStatusColor(
+                              order.status + "Edit"
+                            )}`}
+                            value={order.status}
+                            onChange={(e) =>
+                              handleStatusUpdate(e.target.value, order)
+                            }
+                          >
+                            <option
+                              value="Pending"
+                              className="bg-yellow-200 text-yellow-600"
+                            >
+                              Pending
+                            </option>
+                            <option
+                              value="Dispatched"
+                              className="bg-blue-200 text-blue-600"
+                            >
+                              Dispatched
+                            </option>
+                            <option
+                              value="Delivered"
+                              className="bg-green-200 text-green-600"
+                            >
+                              Delivered
+                            </option>
+                            <option
+                              value="Cancelled"
+                              className="bg-red-200 text-red-600"
+                            >
+                              Cancelled
+                            </option>
+                          </select>
+                          <XMarkIcon
+                            className="h-4 w-4 cursor-pointer"
+                            onClick={() => seteditableOrderId(null)}
+                          />
+                        </div>
+                      ) : (
+                        <span
                           className={`py-1 px-3 rounded-full text-xs ${getStatusColor(
-                            order.status + "Edit"
+                            order.status
                           )}`}
-                          value={order.status}
-                          onChange={(e) =>
-                            handleStatusUpdate(e.target.value, order)
-                          }
                         >
-                          <option
-                            value="Pending"
-                            className="bg-yellow-200 text-yellow-600"
-                          >
-                            Pending
-                          </option>
-                          <option
-                            value="Dispatched"
-                            className="bg-blue-200 text-blue-600"
-                          >
-                            Dispatched
-                          </option>
-                          <option
-                            value="Delivered"
-                            className="bg-green-200 text-green-600"
-                          >
-                            Delivered
-                          </option>
-                          <option
-                            value="Cancelled"
-                            className="bg-red-200 text-red-600"
-                          >
-                            Cancelled
-                          </option>
-                        </select>
-                        <XMarkIcon
-                          className="h-4 w-4 cursor-pointer"
-                          onClick={() => seteditableOrderId(null)}
-                        />
+                          {order.status}
+                        </span>
+                      )}
+                    </td>
+                    <td className="py-3 px-2">
+                      <div className="text-left">
+                        <strong className="font-bold">Name:</strong>
+                        {order.selectedAddress.name}
                       </div>
-                    ) : (
-                      <span
-                        className={`py-1 px-3 rounded-full text-xs ${getStatusColor(
-                          order.status
-                        )}`}
-                      >
-                        {order.status}
-                      </span>
-                    )}
-                  </td>
-                  <td className="py-3 px-6 text-center">
-                    <div className="text-left">
-                      <strong className="font-bold">Name:</strong>
-                      {order.selectedAddress.name}
-                    </div>
-                    <div className="text-left break-all">
-                      <strong className="font-bold">Address:</strong>
-                    </div>
-                    <div className="text-left break-all">
-                      {order.selectedAddress.street}
-                    </div>
-                    <div className="text-left break-all">
-                      {order.selectedAddress.city}
-                    </div>
-                    <div className="text-left break-all">
-                      {order.selectedAddress.state}
-                    </div>
-                    <div className="text-left break-all">
-                      {order.selectedAddress.pinCode}
-                    </div>
-                  </td>
-                  <td className="py-3 px-6 text-center">
-                    <div className="flex item-center justify-center">
-                      <div className="w-6 mr-2 transform hover:text-purple-500 hover:scale-110 cursor-pointer">
-                        <PencilIcon
-                          className="w-6 h-6"
-                          onClick={(e) => handleEdit(order)}
-                        />
+                      <div className="text-left break-all">
+                        <strong className="font-bold">Address:</strong>
                       </div>
-                      <div className="w-6 mr-2 transform hover:text-purple-500 hover:scale-110 cursor-pointer">
-                        <EyeIcon
-                          className="w-6 h-6"
-                          onClick={(e) => handleShow(order)}
-                        />
+                      <div className="text-left break-all">
+                        {order.selectedAddress.street}
                       </div>
-                    </div>
-                  </td>
-                </tr>
+                      <div className="text-left break-all">
+                        {order.selectedAddress.city}
+                      </div>
+                      <div className="text-left break-all">
+                        {order.selectedAddress.state}
+                      </div>
+                      <div className="text-left break-all">
+                        {order.selectedAddress.pinCode}
+                      </div>
+                    </td>
+                    <td className="py-3 px-6 text-center">
+                      <div className="flex item-center justify-center">
+                        <div className="w-6 mr-2 transform hover:text-purple-500 hover:scale-110 cursor-pointer">
+                          <PencilIcon
+                            className="w-6 h-6"
+                            onClick={(e) => handleEdit(order)}
+                          />
+                        </div>
+                        <div className="w-6 mr-2 transform hover:text-purple-500 hover:scale-110 cursor-pointer">
+                          <EyeIcon
+                            className="w-6 h-6"
+                            onClick={(e) => handleShow(order)}
+                          />
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </>
               ))}
           </tbody>
         </table>

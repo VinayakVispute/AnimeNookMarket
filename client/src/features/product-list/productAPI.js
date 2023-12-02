@@ -24,7 +24,7 @@ export function fetchProductsByFilter(filter, sort, pagination) {
   }
 
   params = { ...params, ...sort, ...pagination };
-
+  console.log(params);
   return new Promise(async (resolve, reject) => {
     try {
       const response = await axios.get("http://localhost:8000/products", {
@@ -78,16 +78,41 @@ export function fetchProductById(id) {
 }
 
 export function createProduct(productData) {
+  const {
+    title,
+    description,
+    discountPercentage,
+    price,
+    category,
+    brand,
+    images,
+    thumbnail,
+    stock,
+  } = productData;
+  const formData = new FormData();
+
+  formData.append("title", title);
+  formData.append("description", description);
+  formData.append("discountPercentage", discountPercentage);
+  formData.append("price", price);
+  formData.append("category", category);
+  formData.append("brand", brand);
+  formData.append("stock", stock);
+  formData.append("thumbnail", productData.thumbnail);
+  for (let i = 0; i < productData.images.length; i++) {
+    formData.append("images", productData.images[i]);
+  }
+  console.log(productData, images, thumbnail);
+
   return new Promise(async (resolve, reject) => {
     try {
       const response = await axios.post(
         "http://localhost:8000/products",
-        productData,
+        formData,
         {
           withCredentials: true,
           headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
           },
         }
       );

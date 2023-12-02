@@ -1,12 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
+import { FileUploader } from "react-drag-drop-files";
 import {
   createProductAsync,
   selectBrands,
   selectCategories,
 } from "../../product-list/productSlice";
-
+import "./style.css";
 const ProductForm = () => {
   const dispatch = useDispatch();
 
@@ -19,23 +20,64 @@ const ProductForm = () => {
 
   const categories = useSelector(selectCategories);
   const brands = useSelector(selectBrands);
+  const [thumbnail, setThumbnail] = useState(null);
+  const [thumbnailPreview, setThumbnailPreview] = useState(null);
+  const [images, setImages] = useState([]);
+  const [imagePreviews, setImagePreviews] = useState([]);
+  const [imageError, setImageError] = useState(null);
+  const [thumbnailError, setThumbnailError] = useState(null);
   const onSubmit = (data) => {
-    const product = { ...data };
-    product.images = [product.Image1, product.Image2, product.Image3];
-    product.rating = 0;
-    product.price = parseInt(product.price);
-    product.stock = parseInt(product.stock);
-    product.discountPercentage = parseInt(product.discountPercentage);
+    if (images.length === 0) {
+      setImageError("3 Images are required");
+    }
+    if (!thumbnail) {
+      setThumbnailError("Thumbnail is required");
+    }
+    if (thumbnailError || imageError) return;
+    const productData = { ...data, thumbnail, images };
 
-    delete product["Image1"];
-    delete product["Image2"];
-    delete product["Image3"];
-    dispatch(createProductAsync(product));
+    dispatch(createProductAsync(productData));
   };
+
+  const handleFileChangeThumbnail = (file) => {
+    setThumbnailError(null);
+    console.log(file);
+    if (file) {
+      setThumbnail(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setThumbnailPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleFileChangeImages = (file) => {
+    setImageError(null);
+    const files = file;
+    if (files.length !== 3) {
+      alert("Please select 3 images together");
+      return;
+    }
+    const selectedFiles =
+      files.length > 3 ? Array.from(files).slice(0, 3) : Array.from(files);
+    setImages(selectedFiles);
+
+    const newPreviews = [];
+    selectedFiles.forEach((file) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        newPreviews.push(reader.result);
+        setImagePreviews([...newPreviews]);
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
   return (
     <form
       noValidate
-      className="max-w-4xl mx-auto my-8 pb-8 "
+      className="max-w-4xl mx-auto my-8 pb-8"
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="space-y-12 bg-white p-12">
@@ -205,7 +247,9 @@ const ProductForm = () => {
                   <option value="">Select a Category</option>
                   {categories &&
                     categories.map((category) => (
-                      <option key={category.value}>{category.label}</option>
+                      <option key={category.value} value={category.id}>
+                        {category.label}
+                      </option>
                     ))}
                 </select>
               </div>
@@ -234,7 +278,9 @@ const ProductForm = () => {
                   <option value="">Select a Brand</option>
                   {brands &&
                     brands.map((brand) => (
-                      <option key={brand.value}>{brand.label}</option>
+                      <option key={brand.value} value={brand.id}>
+                        {brand.label}
+                      </option>
                     ))}
                 </select>
               </div>
@@ -244,92 +290,162 @@ const ProductForm = () => {
                 </p>
               )}
             </div>
-          </div>
-          <div className="col-span-full">
-            <label
-              htmlFor="thumbnail"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
-              Thumbnail
-            </label>
-            <div className="mt-2">
-              <input
-                type="text"
-                {...register("thumbnail", {
-                  required: "thumbnail is required",
-                })}
-                id="thumbnail"
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
+            <div className="col-span-full">
+              <label
+                htmlFor="thumbnail"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
+                Thumbnail
+              </label>
+              <div className="flex items-center justify-center w-full">
+                <label
+                  htmlFor="thumbnail"
+                  className="flex flex-col  justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 "
+                >
+                  <FileUploader
+                    id="thumbnail"
+                    types={["png", "jpg", "jpeg"]}
+                    label="Upload Thumbnail"
+                    onTypeError={(type) => alert(`${type} is not allowed`)}
+                    type="file"
+                    children={
+                      <div className="flex flex-col items-center h-64 justify-center pt-5 pb-6">
+                        {thumbnailPreview ? (
+                          <>
+                            <img
+                              src={thumbnailPreview}
+                              alt="Preview"
+                              className="w-full h-32 object-cover mb-4 rounded-md"
+                            />
+                            <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                              <span className="font-semibold underline py-2">
+                                Uploaded{" "}
+                              </span>
+                              Wanna Upload Another?
+                            </p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">
+                              SVG, PNG, JPG, or GIF (MAX. 800x400px)
+                            </p>
+                          </>
+                        ) : (
+                          <>
+                            <svg
+                              className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+                              aria-hidden="true"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 20 16"
+                            >
+                              <path
+                                stroke="currentColor"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                              />
+                            </svg>
+                            <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                              <span className="font-semibold underline py-2">
+                                Click to upload{" "}
+                              </span>
+                              or drag and drop
+                            </p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">
+                              SVG, PNG, JPG, or GIF (MAX. 800x400px)
+                            </p>
+                          </>
+                        )}
+                      </div>
+                    }
+                    handleChange={handleFileChangeThumbnail}
+                  />
+                </label>
+              </div>
+              {thumbnailError && (
+                <p className="mt-2 text-sm text-red-500">{thumbnailError}</p>
+              )}
             </div>
-            {errors.thumbnail && (
-              <p className="mt-2 text-sm text-red-500">
-                {errors.thumbnail.message}
-              </p>
-            )}
-          </div>
-          <div className="col-span-full">
-            <label
-              htmlFor="Image1"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
-              Image1
-            </label>
-            <div className="mt-2">
-              <input
-                type="text"
-                {...register("Image1", { required: "Image1 is required" })}
-                id="Image1"
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
+
+            <div className="col-span-full">
+              <label
+                htmlFor="images"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
+                Images
+              </label>
+              <div className="flex items-center justify-center w-full">
+                <label
+                  htmlFor="images"
+                  className="flex flex-col  justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 "
+                >
+                  <FileUploader
+                    id="images"
+                    label="Upload Images"
+                    types={["png", "jpg", "jpeg"]}
+                    onTypeError={(type) => alert(`${type} is not allowed`)}
+                    children={
+                      <div className="flex flex-col items-center justify-center pt-5 pb-6 h-64 ">
+                        {imagePreviews.length > 0 ? (
+                          <>
+                            <div className="grid grid-cols-3 gap-4">
+                              {imagePreviews.map((preview, index) => (
+                                <img
+                                  key={index}
+                                  src={preview}
+                                  alt={`Preview ${index + 1}`}
+                                  className="w-full h-32 object-cover mb-4 rounded-md"
+                                />
+                              ))}
+                            </div>
+                            <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                              <span className="font-semibold underline py-2">
+                                Uploaded{" "}
+                              </span>
+                              Wanna Upload Another?
+                            </p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">
+                              SVG, PNG, JPG, or GIF (MAX. 800x400px)
+                            </p>
+                          </>
+                        ) : (
+                          <>
+                            <svg
+                              className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+                              aria-hidden="true"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 20 16"
+                            >
+                              <path
+                                stroke="currentColor"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                              />
+                            </svg>
+                            <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                              <span className="font-semibold underline py-2">
+                                Click to upload{" "}
+                              </span>
+                              or drag and drop
+                            </p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">
+                              SVG, PNG, JPG, or GIF (MAX. 800x400px)
+                            </p>
+                          </>
+                        )}
+                      </div>
+                    }
+                    handleChange={handleFileChangeImages}
+                    multiple
+                  />
+                </label>
+              </div>
+              {imageError && (
+                <p className="mt-2 text-sm text-red-500">{imageError}</p>
+              )}
             </div>
-            {errors.Image1 && (
-              <p className="mt-2 text-sm text-red-500">
-                {errors.Image1.message}
-              </p>
-            )}
-          </div>
-          <div className="col-span-full">
-            <label
-              htmlFor="Image2"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
-              Image2
-            </label>
-            <div className="mt-2">
-              <input
-                type="text"
-                {...register("Image2", { required: "Image2 is required" })}
-                id="Image2"
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-            </div>
-            {errors.Image2 && (
-              <p className="mt-2 text-sm text-red-500">
-                {errors.Image2.message}
-              </p>
-            )}
-          </div>
-          <div className="col-span-full">
-            <label
-              htmlFor="Image3"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
-              Image3
-            </label>
-            <div className="mt-2">
-              <input
-                type="text"
-                {...register("Image3", { required: "Image3 is required" })}
-                id="Image3"
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-            </div>
-            {errors.Image3 && (
-              <p className="mt-2 text-sm text-red-500">
-                {errors.Image3.message}
-              </p>
-            )}
           </div>
         </div>
       </div>

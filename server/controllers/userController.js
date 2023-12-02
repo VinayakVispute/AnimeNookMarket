@@ -5,8 +5,9 @@ async function getUserById(req, res) {
 
   try {
     // Fetch the user by ID, excluding "password" and "salt" fields
-    const user = await User.findById(userId, { password: 0, salt: 0 });
-
+    const user = await User.findById(userId, { password: 0, salt: 0 }).populate(
+      "addresses"
+    );
     if (!user) {
       return res
         .status(404)
@@ -31,7 +32,7 @@ async function updateUserById(req, res) {
     // Update the user by ID, excluding "password" and "salt" fields from the returned document
     const updatedUser = await User.findByIdAndUpdate(userId, updateData, {
       new: true,
-    });
+    }).populate("addresses");
 
     if (!updatedUser) {
       return res

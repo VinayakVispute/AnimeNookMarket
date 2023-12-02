@@ -48,4 +48,4 @@ addressSchema.set("toJSON", {
   },
 });
 
-const Address = mongoose.model("Address", addressSchema);
+module.exports = mongoose.model("Address", addressSchema);

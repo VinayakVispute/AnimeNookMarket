@@ -6,7 +6,6 @@ const jwt = require("jsonwebtoken");
 const SECRET_KEY = "SECRET_KEY";
 
 const signUp = async (req, res) => {
-  console.log("req.body");
   try {
     const { email, password } = req.body;
 
@@ -98,7 +97,6 @@ const login = async (req, res) => {
 
 const checkUser = async (req, res) => {
   const loggedUser = await req.user;
-  console.log(req.user);
   if (!loggedUser) {
     return res.json({
       success: false,

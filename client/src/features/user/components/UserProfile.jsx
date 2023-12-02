@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectUserInfo, updateUserAsync } from "../userSlice";
+import {
+  addAddressToUserAsync,
+  deleteAddressAsync,
+  selectUserInfo,
+  updateAddressAsync,
+  updateUserAsync,
+} from "../userSlice";
 import { useForm } from "react-hook-form";
 import {
   fetchAllCountriesAsync,
@@ -24,8 +30,6 @@ const UserProfile = () => {
   }, [dispatch]);
   const countries = useSelector(selectAllCountries);
 
-  console.log(user);
-
   const [selectedAddress, setSelectedAddress] = useState(null);
 
   const handleAddressEdit = (index) => {
@@ -46,16 +50,13 @@ const UserProfile = () => {
     }
   };
 
-  const handleAddressChange = (updatedAddress, index) => {
-    const newUser = { ...user, addresses: [...user.addresses] }; //shallow copy of user object
-    newUser.addresses.splice(index, 1, updatedAddress);
-    dispatch(updateUserAsync(newUser));
+  const handleAddressChange = (updatedAddress, addressId) => {
+    dispatch(updateAddressAsync({ updatedAddress, addressId }));
     setSelectedAddress(null);
   };
 
-  const handleAddressRemove = (index) => {
-    const newUser = { ...user, addresses: [...user.addresses] }; //shallow copy of user object
-    dispatch(updateUserAsync(newUser));
+  const handleAddressRemove = (addressId) => {
+    dispatch(deleteAddressAsync(addressId));
   };
 
   const handleAddressAdd = () => {
@@ -65,11 +66,7 @@ const UserProfile = () => {
   };
 
   const handleAddFormSubmit = (data) => {
-    const newUser = {
-      ...user,
-      addresses: [...user.addresses, data],
-    };
-    dispatch(updateUserAsync(newUser));
+    dispatch(addAddressToUserAsync(data));
     setShowAddForm(false);
   };
 
@@ -114,7 +111,7 @@ const UserProfile = () => {
                   className="bg-white p-5 mt-12"
                   noValidate
                   onSubmit={handleSubmit((data) =>
-                    handleAddressChange(data, index)
+                    handleAddressChange(data, address.id)
                   )}
                 >
                   <div className="space-y-12">
@@ -196,10 +193,7 @@ const UserProfile = () => {
                             >
                               {countries &&
                                 countries.map((country) => (
-                                  <option
-                                    key={country.value}
-                                    value={country.name}
-                                  >
+                                  <option key={country.id} value={country.name}>
                                     {country.name}
                                   </option>
                                 ))}
@@ -371,7 +365,7 @@ const UserProfile = () => {
                     {selectedAddress === index ? "Editing" : "Edit"}
                   </button>
                   <button
-                    onClick={(e) => handleAddressRemove(e, index)}
+                    onClick={(e) => handleAddressRemove(address.id)}
                     className="h-8 px-2 rounded-md bg-red-500 text-white"
                   >
                     Remove

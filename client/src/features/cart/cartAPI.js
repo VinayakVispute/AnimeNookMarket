@@ -80,14 +80,16 @@ export function resetCart() {
     try {
       // TODO: We will not hard-code the server URL here
       const response = await fetchItemsByUserId();
-      const userCartItems = response.data;
-
+      console.log("response", response);
+      const userCartItems = response.data?.data;
+      console.log("userCartItems", userCartItems);
       for (let item of userCartItems) {
         await deleteItemsfromCart(item.id);
       }
 
       resolve({ status: "success" });
     } catch (error) {
+      console.log("error", error);
       reject(error);
     }
   });

@@ -56,13 +56,14 @@ const ProductForm = () => {
       thumbnail,
       images,
     } = product;
+    console.log("product", product);
     setValue("title", title);
     setValue("description", description);
     setValue("price", price);
     setValue("discountPercentage", discountPercentage);
     setValue("stock", stock);
-    setValue("category", category);
-    setValue("brand", brand);
+    setValue("category", category.id);
+    setValue("brand", brand.id);
     setValue("thumbnail", thumbnail);
 
     if (images && images.length >= 3) {
@@ -72,24 +73,20 @@ const ProductForm = () => {
     }
   };
 
-  const handleDelete = () => {
-    const productData = { ...product };
-    productData.isDeleted = true;
-    dispatch(updateProductAsync(productData));
+  const handleDelete = async () => {
+    const deleteProduct = { isDeleted: true };
+    const dis = await dispatch(
+      updateProductAsync({ id: productId, deleteProduct })
+    );
+    if (dis.meta.requestStatus === "fulfilled") {
+      alert("Product deleted successfully");
+      return navigate("/admin/products");
+    }
   };
 
   const onSubmit = (data) => {
-    const productData = { ...data };
-    productData.images = [data.Image1, data.Image2, data.Image3];
-
-    productData.price = parseInt(data.price);
-    productData.stock = parseInt(data.stock);
-    productData.discountPercentage = parseInt(data.discountPercentage);
-    productData.id = parseInt(productId);
-    delete productData["Image1"];
-    delete productData["Image2"];
-    delete productData["Image3"];
-    dispatch(updateProductAsync(productData));
+    const updatedData = { id: productId, ...data };
+    dispatch(updateProductAsync(updatedData));
     navigate(`/ProductDetail/${productId}`, { replace: true });
   };
 
@@ -266,7 +263,7 @@ const ProductForm = () => {
                   <option value="">Select a Category</option>
                   {categories &&
                     categories.map((category) => (
-                      <option key={category.value} value={category.value}>
+                      <option key={category.id} value={category.id}>
                         {category.label}
                       </option>
                     ))}
@@ -297,7 +294,7 @@ const ProductForm = () => {
                   <option value="">Select a Brand</option>
                   {brands &&
                     brands.map((brand) => (
-                      <option key={brand.value} value={brand.value}>
+                      <option key={brand.id} value={brand.id}>
                         {brand.label}
                       </option>
                     ))}

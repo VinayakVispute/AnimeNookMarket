@@ -17,7 +17,7 @@ const UserOrders = () => {
   useEffect(() => {
     dispatch(fetchLoggedInUserOrdersAsync(user.id));
   }, [dispatch]);
-
+  console.log(userOrders);
   return (
     <div className="mx-auto max-w-7xl mt-12 bg-white px-4 sm:px-6 lg:px-8">
       <h1 className="py-4 text-4xl font-bold tracking-tight text-gray-900">
@@ -37,12 +37,12 @@ const UserOrders = () => {
           <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
             <div className="flow-root">
               <ul role="list" className="-my-6 divide-y divide-gray-200">
-                {order.items.map((product) => (
-                  <li key={product.id} className="flex py-6">
+                {order.items.map((item) => (
+                  <li key={item.product.id} className="flex py-6">
                     <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                       <img
-                        src={product.thumbnail}
-                        alt={product.title}
+                        src={item.product.thumbnail}
+                        alt={item.product.title}
                         className="h-full w-full object-cover object-center"
                       />
                     </div>
@@ -51,14 +51,16 @@ const UserOrders = () => {
                       <div>
                         <div className="flex justify-between text-base font-medium text-gray-900">
                           <h3>
-                            <Link to={`/ProductDetail/${product.id}`}>
-                              {product.title}
+                            <Link to={`/ProductDetail/${item.product.id}`}>
+                              {item.product.title}
                             </Link>
                           </h3>
-                          <p className="ml-4">$ {discountedPrice(product)}</p>
+                          <p className="ml-4">
+                            $ {discountedPrice(item.product)}
+                          </p>
                         </div>
                         <p className="mt-1 text-sm text-gray-500">
-                          {product.brand}
+                          {item.product.brand.label}
                         </p>
                       </div>
                       <div className="flex flex-1 items-end justify-between text-sm">
@@ -67,7 +69,7 @@ const UserOrders = () => {
                             htmlFor="quantity"
                             className="inline mr-5 text-sm font-medium leading-6 text-gray-900"
                           >
-                            Qty: {product.quantity}
+                            Qty: {item.quantity}
                           </label>
                         </div>
                       </div>
